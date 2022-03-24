@@ -1,26 +1,41 @@
-import tw, { styled } from 'twin.macro'
-import { Logo, Button } from '../components'
+import tw, { styled } from "twin.macro";
+import { Form, Field } from "react-final-form";
 
-const Container = styled.div({
-  ...tw`flex flex-col items-center justify-center h-screen`,
-  variants: {
-    hasBackground: {
-      true: tw`bg-gradient-to-b from-electric to-ribbon`,
-    },
-  },
-})
-
-const ButtonBox = tw.div`flex flex-col justify-center h-full gap-y-5`
+const onSubmit = (data: any) => {
+  console.log(data);
+};
 
 const IndexPage = () => (
-  <Container hasBackground>
-    <ButtonBox>
-      <Button variant="primary">Submit</Button>
-      <Button variant="secondary">Cancel</Button>
-      <Button isSmall>Close</Button>
-    </ButtonBox>
-    <Logo />
-  </Container>
-)
+  <div tw="flex justify-center items-center w-screen h-screen">
+    <section>
+      <Form
+        onSubmit={onSubmit}
+        render={({ handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <h2>Simple Default Input</h2>
+            <div tw="space-x-4">
+              <label>First Name</label>
+              <Field
+                name="firstName"
+                component="input"
+                placeholder="First Name"
+                validate={(url: string) => {
+                  console.log(url);
+                  return fetch(url)
+                    .then((res) =>
+                      res.status == 200 ? undefined : "Link Invalid"
+                    )
+                    .catch((err) => "Link Invalid");
+                }}
+              />
+            </div>
 
-export default IndexPage
+            <button type="submit">Submit</button>
+          </form>
+        )}
+      />
+    </section>
+  </div>
+);
+
+export default IndexPage;
