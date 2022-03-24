@@ -12,25 +12,25 @@ const IndexPage = () => (
         onSubmit={onSubmit}
         render={({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
-            <h2>Simple Default Input</h2>
+            <h2 tw="text-center">Parrot.ai</h2>
             <div tw="space-x-4">
-              <label>First Name</label>
+              <label>Url</label>
               <Field
-                name="firstName"
+                name="url"
                 component="input"
-                placeholder="First Name"
+                placeholder="url"
                 validate={(url: string) => {
-                  console.log(url);
                   return fetch(url)
-                    .then((res) =>
-                      res.status == 200 ? undefined : "Link Invalid"
-                    )
+                    .then((res) => {
+                      return res.status == 200 ? undefined : "Link Invalid";
+                    })
                     .catch((err) => "Link Invalid");
                 }}
               />
+              <button type="submit" tw="border rounded-2xl p-2">
+                >>>
+              </button>
             </div>
-
-            <button type="submit">Submit</button>
           </form>
         )}
       />
