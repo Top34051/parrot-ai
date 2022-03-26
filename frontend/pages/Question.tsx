@@ -1,4 +1,7 @@
 import tw from "twin.macro";
+//@ts-expect-error
+import { ReactMic } from "@cleandersonlobo/react-mic";
+import { useState } from "react";
 
 const CircleBox = ({ text }: { text: string }) => {
   return <div tw="rounded-full w-8 bg-purple-600 text-white h-8">{text}</div>;
@@ -24,7 +27,11 @@ const Arow = ({
   );
 };
 
+const onStop = (recorded: any) => {};
+const onData = (recorded: any) => {};
+
 const Question = () => {
+  const [isRecord, setIsRecord] = useState(false);
   return (
     <div tw="flex justify-center items-center">
       <section tw="flex justify-between">
@@ -33,6 +40,14 @@ const Question = () => {
       </section>
       <section></section>
       <section></section>
+      <ReactMic
+        record={isRecord}
+        className="sound-wave"
+        onStop={onStop}
+        onData={onData}
+        strokeColor="#000000"
+        backgroundColor="#FF4081"
+      />
     </div>
   );
 };
