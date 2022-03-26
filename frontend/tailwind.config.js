@@ -2,10 +2,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        electric: '#db00ff',
-        ribbon: '#0047ff',
+        electric: "#db00ff",
+        ribbon: "#0047ff",
+        ggg: "#e3e3e3",
       },
     },
   },
   plugins: [],
-}
+};
