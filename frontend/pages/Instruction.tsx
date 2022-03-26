@@ -16,10 +16,10 @@ const Item = ({ Button, text }: { Button: JSX.Element; text: string }) => {
 const Instruction = () => {
   return (
     <div tw="h-screen w-screen">
-      <h1 tw="text-purple-500 text-3xl font-mono font-bold px-8 py-4">
+      <h1 tw="text-purple-700 text-3xl font-mono font-bold px-8 py-4">
         Instruction
       </h1>
-      <div tw="flex items-center justify-center">
+      <div tw="flex items-center">
         <section tw="grid grid-rows-4">
           <Item Button={<Record />} text={"Click to record"} />
           <Item Button={<Stop />} text={"Click to stop recording"} />

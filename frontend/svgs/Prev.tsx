@@ -2,7 +2,7 @@ const Prev = () => {
   return (
     <svg
       tw="w-4 h-4"
-      fill="grey"
+      fill="#e3e3e3"
       stroke="white"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"

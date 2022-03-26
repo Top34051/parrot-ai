@@ -2,12 +2,12 @@ const Stop = () => {
   return (
     <svg
       tw="w-4 h-4"
-      fill="grey"
+      fill="#e3e3e3"
       // stroke="red"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle cx="12" cy="12" r="9"></circle>
+      <circle cx="12" cy="12" r="8"></circle>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
