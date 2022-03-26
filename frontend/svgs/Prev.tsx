@@ -1,7 +1,7 @@
 const Prev = () => {
   return (
     <svg
-      className="w-6 h-6"
+      tw="w-4 h-4"
       fill="gray"
       stroke="white"
       viewBox="0 0 24 24"
