@@ -28,7 +28,7 @@ const IndexPage = () => (
                 }}
               />
               <button type="submit" tw="border rounded-2xl p-2">
-                >>>
+                {">>>"}
               </button>
             </div>
           </form>
