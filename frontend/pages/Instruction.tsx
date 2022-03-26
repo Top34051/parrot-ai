@@ -7,7 +7,7 @@ import Record from "../svgs/Record";
 const Item = ({ Button, text }: { Button: JSX.Element; text: string }) => {
   return (
     <div tw="row-span-1 grid grid-cols-2 items-center">
-      <div tw="col-span-1">{Button}</div>
+      <div tw="col-span-1 w-2/3">{Button}</div>
       <h1 tw="col-span-1 font-bold text-2xl">{text}</h1>
     </div>
   );
