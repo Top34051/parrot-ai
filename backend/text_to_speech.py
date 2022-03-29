@@ -21,10 +21,4 @@ class TextToSpeech():
             voice=self.voice, 
             audio_config=self.audio_config
         )
-        with open('output.mp3', 'wb') as audio:
-            audio.write(response.audio_content)
-        return response.audio_content
-
-if __name__ == '__main__':
-    text_to_speech = TextToSpeech()
-    print(text_to_speech.synthesize('Hello World'))
+        return str(response.audio_content)
