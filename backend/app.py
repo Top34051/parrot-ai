@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 
+import requests
+
 from form_scraper import extract_form
 from text_to_speech import TextToSpeech
 from speech_to_text import SpeechToText
@@ -12,9 +14,10 @@ text_to_speech = TextToSpeech()
 speech_to_text = SpeechToText()
 
 
-@app.get("/")
-def root():
-    return "Hello world"
+@app.get('/is_valid_url')
+def is_valid_url(url: str):
+    response = requests.get(url)
+    return response.status_code == 200
 
 
 @app.post('/transcribe')
