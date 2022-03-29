@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from form_scraper import extract_items
+from form_scraper import extract_form
 from text_to_speech import TextToSpeech
 from speech_to_text import SpeechToText
 
@@ -24,9 +24,9 @@ def transcribe(audio_content: str):
 @app.post('/forms')
 def forms(url: str):
     
-    items = extract_items(url)
+    form = extract_form(url)
 
-    text = items['data']['text']
+    text = form['form_items']['data']['text']
 
     if 'options' in text:
         audio_content = {
@@ -39,6 +39,6 @@ def forms(url: str):
             'title': text_to_speech.synthesize(text['title']),
             'description': text_to_speech.synthesize(text['description'])
         }
-    items['data']['audio_content'] = audio_content
+    form['form_items']['data']['audio_content'] = audio_content
 
-    return items
+    return form

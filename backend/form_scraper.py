@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def extract_items(url: str):
+def extract_form(url: str):
 
     # get html content of the webpage
     webpage = requests.get(url)
