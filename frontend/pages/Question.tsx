@@ -29,11 +29,6 @@ const Arow = ({
 const onStop = (recorded: any) => {};
 const onData = (recorded: any) => {};
 
-//@ts-expect-error
-const { ReactMic } = dynamic(() => import("@cleandersonlobo/react-mic"), {
-  ssr: false,
-});
-
 const Question = () => {
   const [isRecord, setIsRecord] = useState(false);
   return (
@@ -42,19 +37,7 @@ const Question = () => {
         <div>"WW8"</div>
         <h1>Image Suthita</h1>
       </section>
-      <section>
-        <ReactMic
-          record={isRecord}
-          className="sound-wave"
-          onStop={(data: any) => {
-            onStop(data);
-            setIsRecord(false);
-          }}
-          onData={onData}
-          strokeColor="#000000"
-          backgroundColor="#FF4081"
-        />
-      </section>
+      <section></section>
       <section></section>
     </div>
   );
