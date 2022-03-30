@@ -5,11 +5,13 @@ import useStore from "../store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const IndexPage = () => {
   const [inputDat, setInputDat] = useState<string>("");
   const [isCheck, setIsCheck] = useState(false);
   const { setUrl, formData, setFormData } = useStore();
+  const router = useRouter();
 
   const onSubmit = (data: any) => {
     setInputDat(data.url);
@@ -43,6 +45,9 @@ const IndexPage = () => {
         .then((res) => res.json())
         .then((res) => {
           setFormData(res);
+          setTimeout(() => {
+            router.push("/Question");
+          }, 5000);
         })
         .catch(console.error);
     }
@@ -66,7 +71,11 @@ const IndexPage = () => {
             </form>
           )}
         />
-        {formData && <p tw="text-green-600">Information Loaded!</p>}
+        {formData && (
+          <p tw="text-green-600">
+            Information Loaded!, will start the form in 5 seconds.
+          </p>
+        )}
       </section>
       <div tw="absolute bottom-10 right-0 pr-32 pb-4 cursor-pointer">
         <Link href="/Question">
