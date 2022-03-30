@@ -1,6 +1,18 @@
 import create from "zustand";
 
-interface iformItems {}
+interface iformItems {
+  data: {
+    audio_content: {
+      title: string;
+    };
+    text: {
+      title: string;
+      description: string;
+    };
+  };
+  required: boolean;
+  type: "short-answer";
+}
 
 export interface iFormData {
   description: string;
@@ -13,6 +25,8 @@ export interface storeType {
   setUrl: (url: string) => void;
   formData: iFormData | null;
   setFormData: (form: iFormData) => void;
+  nq: number; //current number of question
+  setNq: (nq: number) => void;
 }
 
 const useStore = create<storeType>((set) => ({
@@ -26,7 +40,13 @@ const useStore = create<storeType>((set) => ({
   setFormData: (form) =>
     set((state) => ({
       ...state,
-      form,
+      formData: form,
+    })),
+  nq: 0,
+  setNq: (nq) =>
+    set((state) => ({
+      ...state,
+      nq,
     })),
 }));
 

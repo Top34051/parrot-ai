@@ -2,12 +2,14 @@ import tw, { styled } from "twin.macro";
 import { Form, Field } from "react-final-form";
 import { useEffect, useState } from "react";
 import useStore from "../store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
 
 const IndexPage = () => {
   const [inputDat, setInputDat] = useState<string>("");
-  const [urlNVal, isUrlNVal] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
-  const { setUrl } = useStore();
+  const { setUrl, formData, setFormData } = useStore();
 
   const onSubmit = (data: any) => {
     setInputDat(data.url);
@@ -24,7 +26,7 @@ const IndexPage = () => {
           setUrl(inputDat);
         })
         .catch(console.log);
-    } else {
+    } else if (!formData) {
       fetch(
         `http://localhost:8000/forms?` +
           new URLSearchParams({ url: inputDat }).toString(),
@@ -40,7 +42,7 @@ const IndexPage = () => {
       )
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
+          setFormData(res);
         })
         .catch(console.error);
     }
@@ -64,7 +66,13 @@ const IndexPage = () => {
             </form>
           )}
         />
+        {formData && <p tw="text-green-600">Information Loaded!</p>}
       </section>
+      <div tw="absolute bottom-10 right-0 pr-32 pb-4 cursor-pointer">
+        <Link href="/Question">
+          <FontAwesomeIcon icon={faArrowRight} size="4x" />
+        </Link>
+      </div>
     </div>
   );
 };

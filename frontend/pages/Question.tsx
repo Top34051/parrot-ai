@@ -7,6 +7,8 @@ import RecorderControls from "../components/renderControl";
 import RecordingsList from "../components/recrodingList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import useStore from "../store";
+import { useRouter } from "next/router";
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -55,24 +57,16 @@ const Question = () => {
   const { audio } = recorderState;
   const [isPlaying, setIsPlaying] = useState(false);
   const [transcribeAudio, setTranscribeAudio] = useState("");
-  const questionText = "Q1";
+  const { formData, nq, setNq } = useStore();
+  const router = useRouter();
 
-  useEffect(() => {
-    fetch("http://localhost:8000/transcribe", {
-      method: "POST",
-      mode: "cors",
-      cache: "no-cache",
-      body: JSON.stringify({ audio_content: "hello my friend" }),
-      headers: {
-        "Content-type": "application/json",
-        accept: "application/json",
-      },
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch(console.error);
-  }, []);
+  if (!formData) {
+    router.push("/");
+    return null;
+  }
+
+  // const questionText = formData?.form_items[0].data.text;
+  const questionText = `Q ${nq + 1}`;
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
