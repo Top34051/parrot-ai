@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import useRecorder from "../hooks/use-recorder";
 import { UseRecorder } from "../types/recorder";
 import RecordIco from "../svgs/Record";
+import { startRecording } from "../handlers/recorder-controls";
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -25,11 +26,11 @@ const Arow = ({
   onClick: any;
 }) => {
   return (
-    <div tw="grid grid-cols-10 h-80 items-center">
-      <div tw="col-span-2">
+    <div tw="h-80 items-center relative flex space-x-4">
+      <div>
         <CircleBox text={cText} />
       </div>
-      <div tw="col-span-8 bg-ggg rounded-2xl flex items-center relative p-4">
+      <div tw="bg-ggg rounded-2xl flex items-center relative p-4 w-4/5">
         <div tw="font-mono text-black text-xl">{content}</div>
         <div tw="h-12 w-12 absolute right-1" onClick={onClick}>
           {Icon}
