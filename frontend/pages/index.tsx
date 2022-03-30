@@ -1,12 +1,13 @@
 import tw, { styled } from "twin.macro";
 import { Form, Field } from "react-final-form";
 import { useEffect, useState } from "react";
+import useStore from "../store";
 
 const IndexPage = () => {
   const [inputDat, setInputDat] = useState<string>("");
-  const [formDat, setFormDat] = useState(null);
   const [urlNVal, isUrlNVal] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
+  const { setUrl } = useStore();
 
   const onSubmit = (data: any) => {
     setInputDat(data.url);
@@ -20,6 +21,7 @@ const IndexPage = () => {
       )
         .then((res) => {
           setIsCheck(res.status === 200);
+          setUrl(inputDat);
         })
         .catch(console.log);
     } else {
@@ -36,12 +38,13 @@ const IndexPage = () => {
           },
         }
       )
+        .then((res) => res.json())
         .then((res) => {
           console.log(res);
         })
         .catch(console.error);
     }
-  }, [inputDat]);
+  }, [inputDat, isCheck]);
 
   return (
     <div tw="flex justify-center items-center w-screen h-screen">
