@@ -52,11 +52,13 @@ const Question = () => {
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
-      <div tw="w-2/3 h-full block space-y-10">
-        <section tw="flex justify-between">
+      <section tw="absolute top-10 w-full">
+        <div tw="flex justify-between items-center px-10">
           <div>"WW8"</div>
           <h1>Image Suthita</h1>
-        </section>
+        </div>
+      </section>
+      <div tw="w-2/3 block space-y-10">
         <section>
           <Arow
             Icon={null}
