@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
+from fastapi.middleware.cors import CORSMiddleware
+
 
 import requests
 
@@ -10,6 +12,21 @@ from tqdm import tqdm
 
 
 app = FastAPI()
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 text_to_speech = TextToSpeech()
 speech_to_text = SpeechToText()
 
@@ -21,7 +38,8 @@ def is_valid_url(url: str):
 
 
 @app.post('/transcribe')
-def transcribe(audio_content: str):
+def transcribe(audio_content: str = Body(..., embed=True)):
+    print(audio_content)
     return speech_to_text.transcribe(audio_content)
 
 

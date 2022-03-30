@@ -6,7 +6,7 @@ import { UseRecorder } from "../types/recorder";
 import RecorderControls from "../components/renderControl";
 import RecordingsList from "../components/recrodingList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -21,11 +21,13 @@ const Arow = ({
   content,
   Icon,
   onClick,
+  isPlaying,
 }: {
   cText: string;
   content: JSX.Element;
   Icon: JSX.Element | null;
   onClick: any;
+  isPlaying?: boolean;
 }) => {
   return (
     <div tw="items-center relative flex space-x-4 w-full">
@@ -51,6 +53,26 @@ const Qtext = ({ qstr }: { qstr: string }) => {
 const Question = () => {
   const { recorderState, ...handlers }: UseRecorder = useRecorder();
   const { audio } = recorderState;
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [transcribeAudio, setTranscribeAudio] = useState("");
+  const questionText = "Q1";
+
+  useEffect(() => {
+    fetch("http://localhost:8000/transcribe", {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      body: JSON.stringify({ audio_content: "hello" }),
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        // setTranscribeAudio(res.body.);
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
@@ -63,10 +85,13 @@ const Question = () => {
       <div tw="w-2/3 block space-y-10">
         <section>
           <Arow
-            Icon={null}
-            cText={"Q1"}
+            Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
+            cText={questionText}
             content={<Qtext qstr={"Name"} />}
-            onClick={() => {}}
+            onClick={() => {
+              setIsPlaying(!isPlaying);
+            }}
+            isPlaying={isPlaying}
           />
         </section>
         <section>
@@ -83,8 +108,8 @@ const Question = () => {
           />
         </section>
       </div>
-      <div tw="absolute bottom-10 right-0 pr-32">
-        <FontAwesomeIcon icon={faArrowRight} size="2x" />
+      <div tw="absolute bottom-10 right-0 pr-32 pb-4">
+        <FontAwesomeIcon icon={faArrowRight} size="6x" />
       </div>
     </div>
   );
