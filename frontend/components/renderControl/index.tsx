@@ -14,27 +14,25 @@ export default function RecorderControls({
   const { recordingMinutes, recordingSeconds, initRecording } = recorderState;
   const { startRecording, saveRecording, cancelRecording } = handlers;
   return (
-    <div tw="flex space-x-2 flex-row">
+    <div tw="flex space-x-2">
       <div>
-        <div>
-          {initRecording && <div className="recording-indicator"></div>}
-          <span>{formatMinutes(recordingMinutes)}</span>
-          <span>:</span>
-          <span>{formatSeconds(recordingSeconds)}</span>
-        </div>
-        {initRecording && (
-          <div className="cancel-button-container">
-            <button
-              className="cancel-button"
-              title="Cancel recording"
-              onClick={cancelRecording}
-            >
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-          </div>
-        )}
+        {initRecording && <div className="recording-indicator"></div>}
+        <span>{formatMinutes(recordingMinutes)}</span>
+        <span>:</span>
+        <span>{formatSeconds(recordingSeconds)}</span>
       </div>
-      <div className="start-button-container">
+      {initRecording && (
+        <div className="cancel-button-container">
+          <button
+            className="cancel-button"
+            title="Cancel recording"
+            onClick={cancelRecording}
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+        </div>
+      )}
+      <div>
         {initRecording ? (
           <button
             className="start-button"

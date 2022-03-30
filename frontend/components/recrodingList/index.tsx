@@ -18,20 +18,16 @@ export default function RecordingsList({ audio }: RecordingsListProps) {
   }, [recording]);
 
   return (
-    <div className="recordings-container">
+    <div>
       {recording ? (
         <>
           <h1>Your recordings</h1>
-          <div className="recordings-list">
+          <div>
             <div tw="flex space-x-2 flex-row">
               <audio controls src={recording.audio} ref={audioRef} />
-              <div className="delete-button-container">
+              <div>
                 <canvas ref={canvasRef}></canvas>
-                <button
-                  className="delete-button"
-                  title="Delete this audio"
-                  onClick={() => deleteAudio(recording.key)}
-                >
+                <button onClick={() => deleteAudio(recording.key)}>
                   <FontAwesomeIcon icon={faTrashAlt} />
                 </button>
               </div>
@@ -39,7 +35,7 @@ export default function RecordingsList({ audio }: RecordingsListProps) {
           </div>
         </>
       ) : (
-        <div className="no-records">
+        <div>
           {/* <FontAwesomeIcon
             icon={faExclamationCircle}
             size="2x"

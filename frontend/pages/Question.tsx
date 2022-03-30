@@ -26,13 +26,13 @@ const Arow = ({
   onClick: any;
 }) => {
   return (
-    <div tw="items-center relative flex space-x-4">
+    <div tw="items-center relative flex space-x-4 w-full">
       <div>
         <CircleBox text={cText} />
       </div>
       <div tw="bg-ggg rounded-2xl flex items-center relative p-4 w-4/5">
-        <div tw="font-mono text-black text-xl">{content}</div>
-        <div tw="h-12 w-12 absolute right-1">{Icon}</div>
+        <div tw="font-mono text-black text-xl w-full">{content}</div>
+        <div tw="px-4 justify-self-end">{Icon}</div>
       </div>
     </div>
   );
