@@ -3,7 +3,7 @@ from google.cloud import speech
 
 class SpeechToText():
 
-    def __init__(self) -> None:
+    def __init__(self):
         self.client = speech.SpeechClient()
         self.config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
@@ -18,5 +18,4 @@ class SpeechToText():
         for result in response.results:
             transcript += result.alternatives[0].transcript.split()
         transcript = ' '.join(transcript)
-        print(transcript)
         return transcript

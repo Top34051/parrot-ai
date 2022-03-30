@@ -29,11 +29,12 @@ The result will be a list of form items listed above.
             'title': <title>,
             'description': <description>
         },
-        'audio-uri': {
+        'audio_content': {
             'title': <title>,
             'description': <description>
         }
     }
+    'required': <required>
 }
 ```
 
@@ -47,11 +48,12 @@ The result will be a list of form items listed above.
             'title': <title>,
             'description': <description>
         },
-        'audio-uri': {
+        'audio_content': {
             'title': <title>,
             'description': <description>
         }
     }
+    'required': <required>
 }
 ```
 
@@ -70,7 +72,7 @@ The result will be a list of form items listed above.
                 ...
             ]
         },
-        'audio-uri': {
+        'audio_content': {
             'title': <title>,
             'description': <description>,
             'options': [
@@ -80,6 +82,7 @@ The result will be a list of form items listed above.
             ]
         }
     }
+    'required': <required>
 }
 ```
 
@@ -98,7 +101,7 @@ The result will be a list of form items listed above.
                 ...
             ]
         },
-        'audio-uri': {
+        'audio_content': {
             'title': <title>,
             'description': <description>,
             'options': [
@@ -108,6 +111,7 @@ The result will be a list of form items listed above.
             ]
         }
     }
+    'required': <required>
 }
 ```
 
@@ -126,7 +130,7 @@ The result will be a list of form items listed above.
                 ...
             ]
         },
-        'audio-uri': {
+        'audio_content': {
             'title': <title>,
             'description': <description>,
             'options': [
@@ -135,7 +139,8 @@ The result will be a list of form items listed above.
                 ...
             ]
         }
-    }
+    },
+    'required': <required>
 }
 ```
 

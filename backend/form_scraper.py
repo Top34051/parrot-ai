@@ -1,35 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 
-from pprint import pprint
 
-
-def extract_texts(s: str):
-    words = []
-    word = ''
-    skip = False
-    for c in s:
-        if c == '<':
-            skip = True
-            if word != '':
-                words.append(word)
-                word = ''
-        elif c == '>':
-            skip = False
-        elif not skip:
-            word += c
-    if word != '':
-        words.append(word)
-    return words
-
-
-def contains_div(s: str, tag: str):
-    idx = s.find('>')
-    s = s[idx + 1:]
-    return tag in s
-
-
-def extract_items(url: str):
+def extract_form(url: str):
 
     # get html content of the webpage
     webpage = requests.get(url)
@@ -38,68 +11,71 @@ def extract_items(url: str):
     # initialize bs for webpage
     soup = BeautifulSoup(content, "html.parser")
 
-    # extract html list items
-    items = soup.find_all("div", {"role": "listitem"})
+    form_title = soup.find('meta', {'property': 'og:title'})
+    if form_title:
+        form_title = form_title['content']
+    else:
+        form_title = ''
 
-    item_dicts = []
+    form_description = soup.find('meta', {'property': 'og:description'})
+    if form_description:
+        form_description = form_description['content']
+    else:
+        form_description = ''
+
+    # extract html list item
+    form_items = []
+
+    items = soup.find_all("div", {"role": "list"})[0]
     for item in items:
 
-        # extract texts from div
-        item_str = str(item)
-        words = extract_texts(item_str)
+        item_content = str(item)
+        item_soup = BeautifulSoup(str(item_content), "html.parser")
 
-        # classify item
-        if words[-1] == 'Your answer':
-            words = words[:-1]
-            item_type = 'response'
-        elif contains_div(item_str, 'radiogroup'):
-            item_type = 'radiogroup'
-        elif contains_div(item_str, 'checkbox') and contains_div(item_str, 'listitem'):
-            item_type = 'checkbox'
-        elif contains_div(item_str, 'checkbox') and not contains_div(item_str, 'listitem'):
-            item_type = None
-        else:
-            item_type = 'text'
+        required = item_soup.find('div', {'role': 'heading'}).find_next('span', {'aria-label': 'Required question'})
+        required = required is not None
 
-        # invalid item
-        if item_type == None:
-            continue
+        title = item_soup.find('div', {'role': 'heading'}).text
 
-        pos = -1
-        if ' *' in words:
-            pos = words.index(' *')
+        description = item_soup.find('div', {'role': 'heading'}).find_next('div').contents
+        description = ' '.join([str(s) for s in description])
 
-        # generate item dict
-        if item_type == 'text':
-            item_dict = {
-                'type': item_type,
-                'is_required': False,
-                'text': ' '.join(words),
-                'options': []
-            }
-        elif pos == -1:
-            item_dict = {
-                'type': item_type,
-                'is_required': False,
-                'text': words[0],
-                'options': words[1:]
-            }
-        else:
-            item_dict = {
-                'type': item_type,
-                'is_required': True,
-                'text': ' '.join(words[:pos]),
-                'options': words[pos+1:]
-            }
-        
-        item_dicts.append(item_dict)
+        type = 'title-and-description'
 
-    return item_dicts
+        if item_soup.find('input'):
+            type = 'short-answer'
 
+        options = []
 
-if __name__ == '__main__':
+        radio_soup = item_soup.find('div', {'role': 'listitem'}).find_all_next('div', {'role': 'radio'})
+        if radio_soup:
+            type = 'multiple-choice'
+            options = [option['aria-label'] for option in radio_soup]
 
-    url = "https://docs.google.com/forms/d/e/1FAIpQLSdWL_sXWM6kvr1uK1Er_1PjJ-HiWS_6mnhADIfvaEVqNy2kYg/viewform"
-    items = extract_items(url)
+        checkboxes_soup = item_soup.find('div', {'role': 'listitem'}).find_all_next('div', {'role': 'checkbox'})
+        if checkboxes_soup:
+            type = 'checkboxes'
+            options = [option['aria-label'] for option in checkboxes_soup]
 
-    pprint(items)
+        options_soup = item_soup.find('div', {'role': 'listitem'}).find_all_next('div', {'role': 'option'})
+        if options_soup:
+            type = 'dropdown'
+            options = [option['data-value'] for option in options_soup if option['tabindex'] == '-1']
+
+        form_items.append({
+            'type': type,
+            'data': {
+                'text': {
+                    'title': title,
+                    'description': description,
+                    'options': options
+                }
+            },
+            'required': required
+        })
+
+    return {
+        'title': form_title,
+        'description': form_description,
+        'form_items': form_items
+    }
