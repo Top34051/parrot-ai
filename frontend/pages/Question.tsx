@@ -22,11 +22,11 @@ const Arow = ({
 }: {
   cText: string;
   content: JSX.Element;
-  Icon: JSX.Element;
+  Icon: JSX.Element | null;
   onClick: any;
 }) => {
   return (
-    <div tw="h-80 items-center relative flex space-x-4">
+    <div tw="items-center relative flex space-x-4">
       <div>
         <CircleBox text={cText} />
       </div>
@@ -38,18 +38,33 @@ const Arow = ({
   );
 };
 
+const Qtext = ({ qstr }: { qstr: string }) => {
+  return (
+    <div>
+      <span>{qstr}</span>
+    </div>
+  );
+};
+
 const Question = () => {
   const { recorderState, ...handlers }: UseRecorder = useRecorder();
   const { audio } = recorderState;
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
-      <div tw="w-2/3 h-full block">
+      <div tw="w-2/3 h-full block space-y-10">
         <section tw="flex justify-between">
           <div>"WW8"</div>
           <h1>Image Suthita</h1>
         </section>
-        <section>{/* <Arow  /> */}</section>
+        <section>
+          <Arow
+            Icon={null}
+            cText={"Q1"}
+            content={<Qtext qstr={"Name"} />}
+            onClick={() => {}}
+          />
+        </section>
         <section>
           <Arow
             Icon={
