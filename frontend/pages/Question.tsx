@@ -21,13 +21,11 @@ const Arow = ({
   content,
   Icon,
   onClick,
-  isPlaying,
 }: {
   cText: string;
   content: JSX.Element;
   Icon: JSX.Element | null;
   onClick: any;
-  isPlaying?: boolean;
 }) => {
   return (
     <div tw="items-center relative flex space-x-4 w-full">
@@ -36,7 +34,9 @@ const Arow = ({
       </div>
       <div tw="bg-ggg rounded-2xl flex items-center relative p-4 w-4/5">
         <div tw="font-mono text-black text-xl w-full">{content}</div>
-        <div tw="px-4 justify-self-end">{Icon}</div>
+        <div tw="px-4 justify-self-end cursor-pointer" onClick={onClick}>
+          {Icon}
+        </div>
       </div>
     </div>
   );
@@ -62,14 +62,14 @@ const Question = () => {
       method: "POST",
       mode: "cors",
       cache: "no-cache",
-      body: JSON.stringify({ audio_content: "hello" }),
+      body: JSON.stringify({ audio_content: "hello my friend" }),
       headers: {
         "Content-type": "application/json",
+        accept: "application/json",
       },
     })
       .then((res) => {
         console.log(res);
-        // setTranscribeAudio(res.body.);
       })
       .catch(console.error);
   }, []);
@@ -91,8 +91,14 @@ const Question = () => {
             onClick={() => {
               setIsPlaying(!isPlaying);
             }}
-            isPlaying={isPlaying}
           />
+          <div tw="hidden">
+            {isPlaying && (
+              <audio src={transcribeAudio} autoPlay>
+                Your browser doesn't support the audio
+              </audio>
+            )}
+          </div>
         </section>
         <section>
           <Arow
