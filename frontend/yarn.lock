@@ -52,6 +52,11 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
+"@foobar404/wave@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@foobar404/wave/-/wave-2.0.3.tgz#12c15adf854038aa1c24d2bf7aa0fbd83ce566ff"
+  integrity sha512-12V66AHNU/gj56cJucWEAGJHbVQcev8TyEI5AFTd8ukapTIOs76HlrHe8oIt0SdIf+5MD6nZ/2R42MMWqlzQuQ==
+
 "@fortawesome/fontawesome-common-types@6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-6.1.1.tgz#7dc996042d21fc1ae850e3173b5c67b0549f9105"

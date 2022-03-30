@@ -14,8 +14,8 @@ export default function RecorderControls({
   const { recordingMinutes, recordingSeconds, initRecording } = recorderState;
   const { startRecording, saveRecording, cancelRecording } = handlers;
   return (
-    <div className="controls-container">
-      <div className="recorder-display">
+    <div>
+      <div>
         <div className="recording-time">
           {initRecording && <div className="recording-indicator"></div>}
           <span>{formatMinutes(recordingMinutes)}</span>

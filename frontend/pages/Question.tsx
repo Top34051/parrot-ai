@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import useRecorder from "../hooks/use-recorder";
 import { UseRecorder } from "../types/recorder";
-import RecordIco from "../svgs/Record";
-import { startRecording } from "../handlers/recorder-controls";
+import RecorderControls from "../components/renderControl";
+import RecordingsList from "../components/recrodingList";
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -32,9 +32,7 @@ const Arow = ({
       </div>
       <div tw="bg-ggg rounded-2xl flex items-center relative p-4 w-4/5">
         <div tw="font-mono text-black text-xl">{content}</div>
-        <div tw="h-12 w-12 absolute right-1" onClick={onClick}>
-          {Icon}
-        </div>
+        <div tw="h-12 w-12 absolute right-1">{Icon}</div>
       </div>
     </div>
   );
@@ -43,11 +41,6 @@ const Arow = ({
 const Question = () => {
   const { recorderState, ...handlers }: UseRecorder = useRecorder();
   const { audio } = recorderState;
-  console.log(recorderState);
-
-  useEffect(() => {
-    console.log(recorderState);
-  }, [recorderState]);
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
@@ -59,10 +52,15 @@ const Question = () => {
         <section>{/* <Arow  /> */}</section>
         <section>
           <Arow
-            Icon={<RecordIco />}
+            Icon={
+              <RecorderControls
+                recorderState={recorderState}
+                handlers={handlers}
+              />
+            }
             cText={"A1"}
-            content={<p>Hello</p>}
-            onClick={startRecording}
+            content={<RecordingsList audio={audio} />}
+            onClick={() => {}}
           />
         </section>
       </div>
