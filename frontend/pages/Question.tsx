@@ -5,6 +5,8 @@ import useRecorder from "../hooks/use-recorder";
 import { UseRecorder } from "../types/recorder";
 import RecorderControls from "../components/renderControl";
 import RecordingsList from "../components/recrodingList";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -80,6 +82,9 @@ const Question = () => {
             onClick={() => {}}
           />
         </section>
+      </div>
+      <div tw="absolute bottom-10 right-0 pr-32">
+        <FontAwesomeIcon icon={faArrowRight} size="2x" />
       </div>
     </div>
   );
