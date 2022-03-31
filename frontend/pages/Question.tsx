@@ -65,11 +65,14 @@ const Question = () => {
   const router = useRouter();
   console.log(formData);
 
-  if (!formData) {
+  if (!formData || nq < 0) {
     router.push("/");
     return null;
   }
-
+  if (nq >= formData.form_items.length) {
+    router.push("/conclusion");
+    return null;
+  }
   // const questionText = formData?.form_items[0].data.text;
   const questionText = `Q ${nq + 1}`;
   const questionTitle = formData.form_items[nq].data.text.title;
@@ -93,7 +96,7 @@ const Question = () => {
       },
 
       function (e) {
-        console.log("Error with decoding audio data" + e.err);
+        console.log("Error with decoding audio data" + JSON.stringify(e));
       }
     );
   }, []);
