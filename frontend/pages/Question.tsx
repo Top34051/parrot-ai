@@ -70,7 +70,6 @@ const Question = () => {
   }
   if (nq >= formData.form_items.length) {
     router.push("/conclusion");
-    // return null;
   }
   const questionText = `Q ${nq + 1}`;
   const questionTitle = formData.form_items[nq].data.text.title;
@@ -120,7 +119,7 @@ const Question = () => {
   useEffect(() => {
     if (audio && audio.length > 0) {
       fetch(
-        `https://parrot-ai-gg.uc.r.appspot.com/forms?` +
+        `https://parrot-ai-gg.uc.r.appspot.com/transcribe?` +
           new URLSearchParams({}).toString(),
         {
           method: "POST",
@@ -133,12 +132,6 @@ const Question = () => {
         }
       )
         .then((res) => res.json())
-        .then((res) => {
-          setFormData(res);
-          setTimeout(() => {
-            router.push("/Question");
-          }, 5000);
-        })
         .catch(console.error);
     }
   }, [audio]);

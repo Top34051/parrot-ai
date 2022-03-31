@@ -7,11 +7,16 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+const IsLoadingComp = () => {
+  return <div></div>;
+};
+
 const IndexPage = () => {
   const [inputDat, setInputDat] = useState<string>("");
   const [isCheck, setIsCheck] = useState(false);
   const { setUrl, formData, setFormData } = useStore();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (data: any) => {
     setInputDat(data.url);
@@ -60,28 +65,25 @@ const IndexPage = () => {
           onSubmit={onSubmit}
           render={({ handleSubmit }) => (
             <form onSubmit={handleSubmit}>
-              <h2 tw="text-center">Parrot.ai</h2>
+              <h2 tw="text-center text-xl font-mono">Parrot.ai</h2>
               <div tw="space-x-4">
-                <label>Url</label>
+                <label tw="text-lg font-mono">Url</label>
                 <Field name="url" component="input" placeholder="url" />
-                <button type="submit" tw="border rounded-2xl p-2">
+                <button type="submit" tw="border rounded-2xl p-2 text-lg">
                   {">>>"}
                 </button>
               </div>
             </form>
           )}
         />
-        {formData && (
-          <p tw="text-green-600">
-            Information Loaded!, will start the form in 5 seconds.
-          </p>
-        )}
+        {formData && <p tw="text-green-600">Information Loaded</p>}
+        {isLoading && <IsLoadingComp />}
       </section>
-      <div tw="absolute bottom-10 right-0 pr-32 pb-4 cursor-pointer">
+      {/* <div tw="absolute bottom-10 right-0 pr-32 pb-4 cursor-pointer">
         <Link href="/Question">
           <FontAwesomeIcon icon={faArrowRight} size="4x" />
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 };
