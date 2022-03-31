@@ -134,23 +134,27 @@ const Question = () => {
   useEffect(() => {
     if (audio && audio.length > 0) {
       fetch(
-        `https://parrot-ai-gg.uc.r.appspot.com/transcribe?` +
-          new URLSearchParams({}).toString(),
-        {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          headers: {
-            "Content-type": "application/json",
-            accept: "application/json",
-          },
-        }
+        `https://parrot-ai-gg.uc.r.appspot.com/transcribe` +
+          // new URLSearchParams({}).toString(),
+          {
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            headers: {
+              "Content-type": "application/json",
+              accept: "application/json",
+            },
+          }
       )
         .then((res) => res.json())
         .catch(console.error);
     }
   }, [audio]);
   console.log(formData);
+
+  useEffect(() => {
+    handlers.cancelRecording();
+  }, [nq]);
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
