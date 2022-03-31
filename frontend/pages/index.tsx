@@ -34,6 +34,7 @@ const IndexPage = () => {
         })
         .catch(console.log);
     } else if (!formData) {
+      setIsLoading(true);
       fetch(
         `https://parrot-ai-gg.uc.r.appspot.com/forms?` +
           new URLSearchParams({ url: inputDat }).toString(),
@@ -52,7 +53,8 @@ const IndexPage = () => {
           setFormData(res);
           setTimeout(() => {
             router.push("/Question");
-          }, 5000);
+          }, 1000);
+          setIsLoading(false);
         })
         .catch(console.error);
     }
