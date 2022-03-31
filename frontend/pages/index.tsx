@@ -52,7 +52,7 @@ const IndexPage = () => {
         .then((res) => {
           setFormData(res);
           setTimeout(() => {
-            router.push("/Question");
+            router.push("/Instruction");
           }, 1000);
           setIsLoading(false);
         })
@@ -81,11 +81,6 @@ const IndexPage = () => {
         {formData && <p tw="text-green-600">Information Loaded</p>}
         {isLoading && <IsLoadingComp />}
       </section>
-      {/* <div tw="absolute bottom-10 right-0 pr-32 pb-4 cursor-pointer">
-        <Link href="/Question">
-          <FontAwesomeIcon icon={faArrowRight} size="4x" />
-        </Link>
-      </div> */}
     </div>
   );
 };
