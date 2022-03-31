@@ -16,6 +16,7 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:3000",
+    "https://parrot-ai.vercel.app/"
 ]
 
 app.add_middleware(

@@ -117,6 +117,32 @@ const Question = () => {
     }
   }, [isPlaying]);
 
+  useEffect(() => {
+    if (audio && audio.length > 0) {
+      fetch(
+        `https://parrot-ai-gg.uc.r.appspot.com/forms?` +
+          new URLSearchParams({}).toString(),
+        {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          headers: {
+            "Content-type": "application/json",
+            accept: "application/json",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          setFormData(res);
+          setTimeout(() => {
+            router.push("/Question");
+          }, 5000);
+        })
+        .catch(console.error);
+    }
+  }, [audio]);
+
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
       <section tw="absolute top-10 w-full">
