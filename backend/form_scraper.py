@@ -37,7 +37,7 @@ def extract_form(url: str):
 
         title = item_soup.find('div', {'role': 'heading'}).text
 
-        description = item_soup.find('div', {'role': 'heading'}).find_next('div').contents
+        description = item_soup.find('div', {'role': 'heading'}).find_next('div').text
         description = ' '.join([str(s) for s in description])
 
         type = 'title-and-description'
