@@ -23,6 +23,27 @@ const CircleBox = ({ text }: { text: string }) => {
   );
 };
 
+const QuestionCom = ({
+  text,
+  Icon,
+  click,
+}: {
+  text: string;
+  Icon: JSX.Element;
+  click: () => void;
+}) => {
+  return (
+    <div>
+      <div tw="flex">
+        <div>{text}</div>
+        <div tw="px-4 justify-self-end cursor-pointer" onClick={click}>
+          {Icon}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Arow = ({
   cText,
   content,
@@ -41,49 +62,25 @@ const Arow = ({
       </div>
       <div tw="bg-ggg rounded-2xl flex items-center relative p-4 w-4/5">
         <div tw="font-mono text-black text-xl w-full">{content}</div>
-        <div tw="px-4 justify-self-end cursor-pointer" onClick={onClick}>
-          {Icon}
-        </div>
+        {Icon && (
+          <div tw="px-4 justify-self-end cursor-pointer" onClick={onClick}>
+            {Icon}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-const Qtext = ({ qstr }: { qstr: string }) => {
-  return (
-    <div>
-      <span>{qstr}</span>
-    </div>
-  );
-};
-
-const Question = () => {
-  const { recorderState, ...handlers }: UseRecorder = useRecorder();
-  const { audio } = recorderState;
-  const [isPlaying, setIsPlaying] = useState(false);
-  const { formData, nq, setNq } = useStore();
-  const router = useRouter();
-
-  if (!formData || nq < 0) {
-    router.push("/");
-    return null;
-  }
-  if (nq >= formData.form_items.length) {
-    router.push("/conclusion");
-  }
-  const questionText = `Q ${nq + 1}`;
-  const questionTitle = formData.form_items[nq].data.text.title;
-  const questionAudio = formData.form_items[nq].data.audio_content.title;
-
+const Sound = ({ text, playCount }: { text: string; playCount: number }) => {
   let audioCtx: any;
   let source: any;
   let audioBuffer;
-
   useEffect(() => {
     //@ts-expect-error
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     source = audioCtx.createBufferSource();
-    audioBuffer = questionAudio;
+    audioBuffer = text;
     audioCtx.decodeAudioData(
       new Uint8Array(iconv.encode(audioBuffer, "iso-8859-1")).buffer,
       function (buffer: any) {
@@ -98,7 +95,7 @@ const Question = () => {
     audioCtx.addEventListener(
       "ended",
       () => {
-        setIsPlaying(false);
+        // setIsPlaying(false);
       },
       false
     );
@@ -106,15 +103,33 @@ const Question = () => {
     audioCtx.onstatechange = function () {
       console.log(audioCtx.state);
     };
-  }, [nq]);
-
-  useEffect(() => {
-    if (isPlaying && source) {
+    if (playCount != 0) {
       source.start(0);
-    } else {
-      // source.stop(0);
     }
-  }, [isPlaying]);
+  }, [playCount]);
+  return null;
+};
+
+const Question = () => {
+  const { recorderState, ...handlers }: UseRecorder = useRecorder();
+  const { audio } = recorderState;
+  const { formData, nq, setNq } = useStore();
+  const [titleSCoutner, setTitleSCounter] = useState(0);
+  const [descSCounter, setDescSCoutner] = useState(0);
+  const router = useRouter();
+
+  if (!formData || nq < 0) {
+    router.push("/");
+    return null;
+  }
+  if (nq >= formData.form_items.length) {
+    router.push("/conclusion");
+  }
+  const questionText = `Q ${nq + 1}`;
+  const questionTitle = formData.form_items[nq].data.text.title;
+  const questionDesc = formData.form_items[nq].data.text.description;
+  const titleAudio = formData.form_items[nq].data.audio_content.title;
+  const descAudio = formData.form_items[nq].data.audio_content.description;
 
   useEffect(() => {
     if (audio && audio.length > 0) {
@@ -135,25 +150,42 @@ const Question = () => {
         .catch(console.error);
     }
   }, [audio]);
+  console.log(formData);
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
       <section tw="absolute top-10 w-full">
         <div tw="flex justify-between items-center px-10">
-          <div>"WW8"</div>
+          <h1 tw="text-lg font-mono font-bold">{formData.title}</h1>
           <h1>Image Suthita</h1>
         </div>
       </section>
       <div tw="w-2/3 block space-y-10">
-        <section>
+        <section tw="space-y-6">
           <Arow
-            Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
+            Icon={null}
             cText={questionText}
-            content={<Qtext qstr={questionTitle} />}
-            onClick={() => {
-              setIsPlaying(true);
-              source.start(0);
-            }}
+            content={
+              <div>
+                <QuestionCom
+                  Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
+                  click={() => {
+                    setTitleSCounter(titleSCoutner + 1);
+                  }}
+                  text={questionTitle}
+                />
+                <Sound text={titleAudio} playCount={titleSCoutner} />
+                <QuestionCom
+                  Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
+                  click={() => {
+                    setDescSCoutner(descSCounter + 1);
+                  }}
+                  text={questionDesc}
+                />
+                <Sound text={descAudio} playCount={descSCounter} />
+              </div>
+            }
+            onClick={() => {}}
           />
         </section>
         <section>
