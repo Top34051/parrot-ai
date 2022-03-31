@@ -37,8 +37,17 @@ def extract_form(url: str):
 
         title = item_soup.find('div', {'role': 'heading'}).text
 
-        description = item_soup.find('div', {'role': 'heading'}).find_next('div').text
-        description = ' '.join([str(s) for s in description])
+        description = item_soup.find('div', {'role': 'heading'}).find_next('div').contents
+        description_res = []
+        for tag in description:
+            tag = str(tag).strip()
+            if tag.startswith('<a'):
+                bs = BeautifulSoup(str(tag), 'html.parser')
+                tag = bs.text
+            elif tag == '<br/>':
+                tag = '\n'
+            description_res.append(tag)
+        description = ' '.join([str(s) for s in description_res])
 
         type = 'title-and-description'
 
