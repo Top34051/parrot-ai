@@ -14,6 +14,7 @@ import {
 import useStore from "../store";
 import { useRouter } from "next/router";
 import iconv from "iconv-lite";
+import axios from "axios";
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -133,16 +134,13 @@ const Question = () => {
         .then((r) => r.blob())
         .then((blob) => {
           console.log(blob);
-          fetch(
-            `http://localhost:8000/transcribe` +
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ audio_content: blob }),
-              }
-          )
+          axios
+            .post(
+              "http://localhost:8000/transcribe" +
+                {
+                  audio_content: blob,
+                }
+            )
             .then((res) => {
               console.log(res);
             })
