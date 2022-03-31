@@ -116,6 +116,7 @@ const Question = () => {
   const { formData, nq, setNq } = useStore();
   const [titleSCoutner, setTitleSCounter] = useState(0);
   const [descSCounter, setDescSCoutner] = useState(0);
+  const [transcribed, setTranscribed] = useState("");
   const router = useRouter();
 
   if (!formData || nq < 0) {
@@ -134,23 +135,26 @@ const Question = () => {
   useEffect(() => {
     if (audio && audio.length > 0) {
       fetch(
-        `https://parrot-ai-gg.uc.r.appspot.com/transcribe` +
-          // new URLSearchParams({}).toString(),
-          {
-            method: "POST",
-            mode: "cors",
-            cache: "no-cache",
-            headers: {
-              "Content-type": "application/json",
-              accept: "application/json",
-            },
-          }
+        `https://localhost:8000/transcribe?` +
+          //@ts-expect-error
+          new URLSearchParams({ audio_content: audio.audio }).toString(),
+        {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          headers: {
+            "Content-type": "application/json",
+            accept: "application/json",
+          },
+        }
       )
         .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+        })
         .catch(console.error);
     }
   }, [audio]);
-  console.log(formData);
 
   useEffect(() => {
     handlers.cancelRecording();
@@ -179,14 +183,18 @@ const Question = () => {
                   text={questionTitle}
                 />
                 <Sound text={titleAudio} playCount={titleSCoutner} />
-                <QuestionCom
-                  Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
-                  click={() => {
-                    setDescSCoutner(descSCounter + 1);
-                  }}
-                  text={questionDesc}
-                />
-                <Sound text={descAudio} playCount={descSCounter} />
+                {questionDesc && (
+                  <>
+                    <QuestionCom
+                      Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
+                      click={() => {
+                        setDescSCoutner(descSCounter + 1);
+                      }}
+                      text={questionDesc}
+                    />
+                    <Sound text={descAudio} playCount={descSCounter} />{" "}
+                  </>
+                )}
               </div>
             }
             onClick={() => {}}
@@ -201,7 +209,12 @@ const Question = () => {
               />
             }
             cText={"A1"}
-            content={<RecordingsList audio={audio} />}
+            content={
+              <>
+                <RecordingsList audio={audio} />
+                {transcribed != "" && <p>{transcribed}</p>}
+              </>
+            }
             onClick={() => {}}
           />
         </section>

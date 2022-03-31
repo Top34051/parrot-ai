@@ -39,7 +39,7 @@ def is_valid_url(url: str):
 
 
 @app.post('/transcribe')
-def transcribe(audio_content: str = Body(..., embed=True)):
+def transcribe(audio_content: str):
     print(audio_content)
     return speech_to_text.transcribe(audio_content)
 
