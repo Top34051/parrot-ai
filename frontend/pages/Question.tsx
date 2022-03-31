@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import useStore from "../store";
 import { useRouter } from "next/router";
+import iconv from "iconv-lite";
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -74,27 +75,25 @@ const Question = () => {
   // const questionText = formData?.form_items[0].data.text;
   const questionText = `Q ${nq + 1}`;
   const questionTitle = formData.form_items[nq].data.text.title;
-  const questionAudio = formData.form_items[
-    nq
-  ].data.audio_content.title.replaceAll("\\x", "");
-  console.log(questionAudio);
-  // const blob = new Blob([questionAudio], { type: "audio/wav" });
-  // const audioUrl = URL.createObjectURL(blob);
+  const questionAudio = formData.form_items[nq].data.audio_content.title;
+  const blob = new Blob([questionAudio], { type: "audio/mp3" });
+  const audioUrl = URL.createObjectURL(blob);
+  console.log(audioUrl);
   //@ts-expect-error
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const source = audioCtx.createBufferSource();
   let audioBuffer;
 
   useEffect(() => {
-    // function _base64ToArrayBuffer(base64: string) {
-    //   var binary_string = window.atob(base64);
-    //   var len = binary_string.length;
-    //   var bytes = new Uint8Array(len);
-    //   for (var i = 0; i < len; i++) {
-    //     bytes[i] = binary_string.charCodeAt(i);
-    //   }
-    //   return bytes.buffer;
-    // }
+    function _base64ToArrayBuffer(base64: string) {
+      var binary_string = window.atob(base64);
+      var len = binary_string.length;
+      var bytes = new Uint8Array(len);
+      for (var i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+      }
+      return bytes.buffer;
+    }
     function urlB64ToUint8Array(base64String: string) {
       const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
       const base64 = (base64String + padding)
@@ -111,9 +110,9 @@ const Question = () => {
       return outputArray;
     }
 
-    audioBuffer = urlB64ToUint8Array(questionAudio);
+    audioBuffer = questionAudio;
     audioCtx.decodeAudioData(
-      audioBuffer,
+      new Uint8Array(iconv.encode(audioBuffer, "iso-8859-1")).buffer,
       function (buffer) {
         source.buffer = buffer;
 
@@ -166,12 +165,6 @@ const Question = () => {
             onClick={() => {}}
           />
         </section>
-        <div>
-          {/* <audio src={audioUrl} autoPlay controls />
-          <a href={audioUrl} download>
-            Click to download
-          </a> */}
-        </div>
       </div>
       <div
         tw="absolute bottom-10 right-0 pr-32 pb-4 cursor-pointer"
