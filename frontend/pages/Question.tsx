@@ -63,7 +63,6 @@ const Question = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const { formData, nq, setNq } = useStore();
   const router = useRouter();
-  console.log(formData);
 
   if (!formData || nq < 0) {
     router.push("/");
@@ -71,51 +70,53 @@ const Question = () => {
   }
   if (nq >= formData.form_items.length) {
     router.push("/conclusion");
-    return null;
+    // return null;
   }
-  // const questionText = formData?.form_items[0].data.text;
   const questionText = `Q ${nq + 1}`;
   const questionTitle = formData.form_items[nq].data.text.title;
   const questionAudio = formData.form_items[nq].data.audio_content.title;
-  const blob = new Blob([questionAudio], { type: "audio/mp3" });
-  const audioUrl = URL.createObjectURL(blob);
-  console.log(audioUrl);
-  //@ts-expect-error
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const source = audioCtx.createBufferSource();
+
+  let audioCtx: any;
+  let source: any;
   let audioBuffer;
 
   useEffect(() => {
+    //@ts-expect-error
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    source = audioCtx.createBufferSource();
     audioBuffer = questionAudio;
     audioCtx.decodeAudioData(
       new Uint8Array(iconv.encode(audioBuffer, "iso-8859-1")).buffer,
-      function (buffer) {
+      function (buffer: any) {
         source.buffer = buffer;
 
         source.connect(audioCtx.destination);
       },
 
-      function (e) {
+      function (e: any) {
         console.log("Error with decoding audio data" + JSON.stringify(e));
       }
     );
-  }, []);
+    audioCtx.addEventListener(
+      "ended",
+      () => {
+        setIsPlaying(false);
+      },
+      false
+    );
 
-  // useEffect(() => {
-  //   if (!isPlaying) {
-  //     source.start(0);
-  //   } else {
-  //     source.stop(0);
-  //   }
-  // }, [isPlaying]);
+    audioCtx.onstatechange = function () {
+      console.log(audioCtx.state);
+    };
+  }, [nq]);
 
-  audioCtx.addEventListener(
-    "ended",
-    () => {
-      setIsPlaying(false);
-    },
-    false
-  );
+  useEffect(() => {
+    if (isPlaying && source) {
+      source.start(0);
+    } else {
+      // source.stop(0);
+    }
+  }, [isPlaying]);
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
@@ -132,7 +133,7 @@ const Question = () => {
             cText={questionText}
             content={<Qtext qstr={questionTitle} />}
             onClick={() => {
-              setIsPlaying(!isPlaying);
+              setIsPlaying(true);
               source.start(0);
             }}
           />
