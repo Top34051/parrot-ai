@@ -92,7 +92,6 @@ const Question = () => {
 
         source.connect(audioCtx.destination);
       },
-
       function (e: any) {
         console.log("Error with decoding audio data" + JSON.stringify(e));
       }
