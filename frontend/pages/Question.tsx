@@ -48,12 +48,10 @@ const Arow = ({
   cText,
   content,
   Icon,
-  onClick,
 }: {
   cText: string;
   content: JSX.Element;
   Icon: JSX.Element | null;
-  onClick: any;
 }) => {
   return (
     <div tw="items-center relative flex space-x-4 w-full">
@@ -62,11 +60,7 @@ const Arow = ({
       </div>
       <div tw="bg-ggg rounded-2xl flex items-center relative p-4 w-4/5">
         <div tw="font-mono text-black text-xl w-full">{content}</div>
-        {Icon && (
-          <div tw="px-4 justify-self-end cursor-pointer" onClick={onClick}>
-            {Icon}
-          </div>
-        )}
+        {Icon && <div tw="px-4 justify-self-end cursor-pointer">{Icon}</div>}
       </div>
     </div>
   );
@@ -140,20 +134,15 @@ const Question = () => {
         .then((blob) => {
           console.log(blob);
           fetch(
-            `https://localhost:8000/transcribe?` +
-              //@ts-expect-error
-              new URLSearchParams({ audio_content: blob }).toString(),
-            {
-              method: "POST",
-              mode: "cors",
-              cache: "no-cache",
-              headers: {
-                "Content-type": "application/json",
-                accept: "application/json",
-              },
-            }
+            `http://localhost:8000/transcribe` +
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ audio_content: blob }),
+              }
           )
-            .then((res) => res.json())
             .then((res) => {
               console.log(res);
             })
@@ -162,7 +151,6 @@ const Question = () => {
             });
         })
         .catch(console.log);
-      // .catch(console.log);
     }
   }, [audio]);
 
@@ -207,7 +195,6 @@ const Question = () => {
                 )}
               </div>
             }
-            onClick={() => {}}
           />
         </section>
         <section>
@@ -225,7 +212,6 @@ const Question = () => {
                 {transcribed != "" && <p>{transcribed}</p>}
               </>
             }
-            onClick={() => {}}
           />
         </section>
       </div>
