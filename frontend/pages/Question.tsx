@@ -61,9 +61,7 @@ const Question = () => {
   const { recorderState, ...handlers }: UseRecorder = useRecorder();
   const { audio } = recorderState;
   const [isPlaying, setIsPlaying] = useState(false);
-
   const { formData, nq, setNq } = useStore();
-  const audioRef = useRef();
   const router = useRouter();
   console.log(formData);
 
@@ -85,31 +83,6 @@ const Question = () => {
   let audioBuffer;
 
   useEffect(() => {
-    function _base64ToArrayBuffer(base64: string) {
-      var binary_string = window.atob(base64);
-      var len = binary_string.length;
-      var bytes = new Uint8Array(len);
-      for (var i = 0; i < len; i++) {
-        bytes[i] = binary_string.charCodeAt(i);
-      }
-      return bytes.buffer;
-    }
-    function urlB64ToUint8Array(base64String: string) {
-      const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-      const base64 = (base64String + padding)
-        .replace(/-/g, "+")
-        .replace(/_/g, "/");
-
-      const rawData = window.atob(base64);
-      const outputArray = new Uint8Array(rawData.length);
-
-      for (let i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i);
-      }
-
-      return outputArray;
-    }
-
     audioBuffer = questionAudio;
     audioCtx.decodeAudioData(
       new Uint8Array(iconv.encode(audioBuffer, "iso-8859-1")).buffer,
@@ -117,7 +90,6 @@ const Question = () => {
         source.buffer = buffer;
 
         source.connect(audioCtx.destination);
-        source.loop = true;
       },
 
       function (e) {
@@ -126,11 +98,21 @@ const Question = () => {
     );
   }, []);
 
-  /* const [audioObj] = useState(new Audio(questionAudio));*/
-
   // useEffect(() => {
-  //   isPlaying ? audioObj.play() : audioObj.pause();
+  //   if (!isPlaying) {
+  //     source.start(0);
+  //   } else {
+  //     source.stop(0);
+  //   }
   // }, [isPlaying]);
+
+  audioCtx.addEventListener(
+    "ended",
+    () => {
+      setIsPlaying(false);
+    },
+    false
+  );
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
