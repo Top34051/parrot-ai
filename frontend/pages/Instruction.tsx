@@ -1,8 +1,11 @@
 import tw from "twin.macro";
-import Next from "../svgs/Next";
-import Prev from "../svgs/Prev";
-import Stop from "../svgs/Stop";
-import Record from "../svgs/Record";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMicrophone,
+  faSave,
+  faArrowLeft,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Item = ({ Button, text }: { Button: JSX.Element; text: string }) => {
   return (
@@ -21,14 +24,20 @@ const Instruction = () => {
       </h1>
       <div tw="flex items-center">
         <section tw="grid grid-rows-4">
-          <Item Button={<Record />} text={"Click to record"} />
-          <Item Button={<Stop />} text={"Click to stop recording"} />
           <Item
-            Button={<Next />}
+            Button={<FontAwesomeIcon icon={faMicrophone} size="2x" />}
+            text={"Click to record"}
+          />
+          <Item
+            Button={<FontAwesomeIcon icon={faSave} size="2x" />}
+            text={"Click to stop recording"}
+          />
+          <Item
+            Button={<FontAwesomeIcon icon={faArrowLeft} size="2x" />}
             text={"Click to confirm and go to next question"}
           />
           <Item
-            Button={<Prev />}
+            Button={<FontAwesomeIcon icon={faArrowRight} size="2x" />}
             text={"Click to go back to the previous question"}
           />
         </section>
