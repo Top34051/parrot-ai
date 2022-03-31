@@ -21,4 +21,11 @@ class TextToSpeech():
             voice=self.voice, 
             audio_config=self.audio_config
         )
-        return str(response.audio_content)
+        return response.audio_content.decode('iso-8859-1')
+
+
+if __name__ == '__main__':
+    module = TextToSpeech()
+    content = module.synthesize("Hello world")
+    with open("hello.mp3", "wb") as f:
+        f.write(content.encode('iso-8859-1'))
