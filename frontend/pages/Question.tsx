@@ -133,26 +133,36 @@ const Question = () => {
   const descAudio = formData.form_items[nq].data.audio_content.description;
 
   useEffect(() => {
-    if (audio && audio.length > 0) {
-      fetch(
-        `https://localhost:8000/transcribe?` +
-          //@ts-expect-error
-          new URLSearchParams({ audio_content: audio.audio }).toString(),
-        {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          headers: {
-            "Content-type": "application/json",
-            accept: "application/json",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
+    if (audio) {
+      console.log("audio url: ", audio);
+      fetch(audio)
+        .then((r) => r.blob())
+        .then((blob) => {
+          console.log(blob);
+          fetch(
+            `https://localhost:8000/transcribe?` +
+              //@ts-expect-error
+              new URLSearchParams({ audio_content: blob }).toString(),
+            {
+              method: "POST",
+              mode: "cors",
+              cache: "no-cache",
+              headers: {
+                "Content-type": "application/json",
+                accept: "application/json",
+              },
+            }
+          )
+            .then((res) => res.json())
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.log("sending error", JSON.stringify(err));
+            });
         })
-        .catch(console.error);
+        .catch(console.log);
+      // .catch(console.log);
     }
   }, [audio]);
 
