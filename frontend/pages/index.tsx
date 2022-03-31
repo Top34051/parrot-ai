@@ -20,7 +20,7 @@ const IndexPage = () => {
   useEffect(() => {
     if (!isCheck) {
       fetch(
-        "http://localhost:8000/is_valid_url?" +
+        "https://parrot-ai-gg.uc.r.appspot.com/is_valid_url?" +
           new URLSearchParams({ url: inputDat }).toString()
       )
         .then((res) => {
@@ -30,7 +30,7 @@ const IndexPage = () => {
         .catch(console.log);
     } else if (!formData) {
       fetch(
-        `http://localhost:8000/forms?` +
+        `https://parrot-ai-gg.uc.r.appspot.com/forms?` +
           new URLSearchParams({ url: inputDat }).toString(),
         {
           method: "POST",
