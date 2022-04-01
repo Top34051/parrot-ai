@@ -159,9 +159,7 @@ const Question = () => {
     //     deleteAudio(recordings[0].key);
     //   }
     // }
-    handlers.cancelRecording();
     clearAudio();
-    console.log("calling");
   }, [nq]);
 
   return (
