@@ -135,7 +135,7 @@ const Question = () => {
         .then((r) => r.blob())
         .then((blob) => {
           const reader = new FileReader();
-          reader.readAsText(blob, "UTF-8");
+          reader.readAsText(blob, "iso-8852-1");
           reader.onload = function () {
             console.log(reader.result);
             axios
@@ -153,12 +153,6 @@ const Question = () => {
   }, [audio]);
 
   useEffect(() => {
-    // if (recordings) {
-    //   for (let i = 0; i < recordings.length; i++) {
-    //     console.log("akey ", recordings[0].key);
-    //     deleteAudio(recordings[0].key);
-    //   }
-    // }
     clearAudio();
   }, [nq]);
 
@@ -224,13 +218,25 @@ const Question = () => {
       </div>
       <div
         tw="absolute bottom-10 right-0 pr-32 pb-4 cursor-pointer"
-        onClick={() => setNq(nq + 1)}
+        onClick={() => {
+          if (nq >= formData.form_items.length) {
+            router.push("/conclusion");
+          } else {
+            setNq(nq + 1);
+          }
+        }}
       >
         <FontAwesomeIcon icon={faArrowRight} size="6x" />
       </div>
       <div
         tw="absolute bottom-10 left-0 pl-32 pb-4 cursor-pointer"
-        onClick={() => setNq(nq - 1)}
+        onClick={() => {
+          if (nq <= 0) {
+            router.push("/Instruction");
+          } else {
+            setNq(nq - 1);
+          }
+        }}
       >
         <FontAwesomeIcon icon={faArrowLeft} size="6x" />
       </div>

@@ -42,7 +42,7 @@ def is_valid_url(url: str):
 def transcribe(audio_content: str = Body(..., embed=True)):
     print(audio_content)
     with open("test.ogg", "wb") as f:
-        f.write(audio_content.encode('UTF-8'))
+        f.write(audio_content.encode('iso-8859-1'))
     return speech_to_text.transcribe(audio_content)
 
 
