@@ -2,9 +2,6 @@ import tw, { styled } from "twin.macro";
 import { Form, Field } from "react-final-form";
 import { useEffect, useState } from "react";
 import useStore from "../store";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 const IsLoadingComp = () => {
@@ -72,12 +69,11 @@ const IndexPage = () => {
               </div>
               <h2 tw="text-center text-4xl font-bold">Parrot.Ai</h2>
               <div tw="mt-10 space-x-11">
-                <label tw="text-lg">Url</label>
                 <Field
                   name="url"
                   component="input"
                   placeholder="url"
-                  tw="text-gray-700 text-lg font-bold mb-2"
+                  tw="text-gray-700 text-lg font-bold mb-2 rounded-xl"
                 />
                 <button
                   type="submit"

@@ -15,8 +15,6 @@ import {
 import useStore from "../store";
 import { useRouter } from "next/router";
 import iconv from "iconv-lite";
-import axios from "axios";
-import logo from "./logo.png";
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -82,7 +80,6 @@ const Sound = ({ text, playCount }: { text: string; playCount: number }) => {
       new Uint8Array(iconv.encode(audioBuffer, "iso-8859-1")).buffer,
       function (buffer: any) {
         source.buffer = buffer;
-
         source.connect(audioCtx.destination);
       },
       function (e: any) {
@@ -156,36 +153,6 @@ const Question = () => {
             .catch((err) => {
               console.error(err);
             });
-          // fetch("http://localhost:8000/transcribe/", {
-          //   headers: {
-          //     accept: "application/json",
-          //     "accept-language": "en,th-TH;q=0.9,th;q=0.8",
-          //     "content-type": "application/x-www-form-urlencoded",
-          //     "sec-ch-ua":
-          //       '" Not A;Brand";v="99", "Chromium";v="99", "Google Chrome";v="99"',
-          //     "sec-ch-ua-mobile": "?0",
-          //     "sec-ch-ua-platform": '"Windows"',
-          //     "sec-fetch-dest": "empty",
-          //     "sec-fetch-mode": "cors",
-          //     "sec-fetch-site": "same-origin",
-          //   },
-          //   referrer: "http://localhost:8000/docs",
-          //   body: "audio_file=Hi%20my%20name%20",
-          //   method: "POST",
-          //   mode: "cors",
-          // });
-
-          // reader.onload = function () {
-          //   console.log(reader.result);
-          //   axios
-          //     .post("http://localhost:8000/transcribe", {
-          //       audio_content: reader.result,
-          //     })
-          //     .then((res) => {
-          //       setTranscribed(res.data);
-          //     })
-          //     .catch(console.log);
-          // };
         })
         .catch(console.log);
     }
