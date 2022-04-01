@@ -5,3 +5,7 @@ export function deleteAudio(audioKey: string, setRecordings: SetRecordings) {
     prevState.filter((record) => record.key !== audioKey)
   );
 }
+
+export function clearAudio(setRecordings: SetRecordings) {
+  setRecordings([]);
+}

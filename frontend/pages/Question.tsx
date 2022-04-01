@@ -1,8 +1,9 @@
 import tw from "twin.macro";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import useRecorder from "../hooks/use-recorder";
 import { UseRecorder } from "../types/recorder";
+import useRecordingsList from "../hooks/use-recordings-list";
 import RecorderControls from "../components/renderControl";
 import RecordingsList from "../components/recrodingList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -129,31 +130,36 @@ const Question = () => {
 
   useEffect(() => {
     if (audio) {
-      console.log("audio url: ", audio);
       fetch(audio)
         .then((r) => r.blob())
         .then((blob) => {
-          console.log(blob);
-          axios
-            .post(
-              "http://localhost:8000/transcribe" +
-                {
-                  audio_content: blob,
-                }
-            )
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.log("sending error", JSON.stringify(err));
-            });
+          const reader = new FileReader();
+          reader.readAsText(blob, "UTF-8");
+          reader.onload = function () {
+            console.log(reader.result);
+            axios
+              .post("http://localhost:8000/transcribe", {
+                audio_content: reader.result,
+              })
+              .then((res) => {
+                setTranscribed(res.data);
+              })
+              .catch(console.log);
+          };
         })
         .catch(console.log);
     }
   }, [audio]);
 
   useEffect(() => {
+    // if (recordings) {
+    //   for (let i = 0; i < recordings.length; i++) {
+    //     console.log("akey ", recordings[0].key);
+    //     deleteAudio(recordings[0].key);
+    //   }
+    // }
     handlers.cancelRecording();
+    console.log("calling");
   }, [nq]);
 
   return (
@@ -203,7 +209,7 @@ const Question = () => {
                 handlers={handlers}
               />
             }
-            cText={"A1"}
+            cText={`A ${nq + 1}`}
             content={
               <>
                 <RecordingsList audio={audio} />
