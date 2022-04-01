@@ -67,11 +67,22 @@ const IndexPage = () => {
           onSubmit={onSubmit}
           render={({ handleSubmit }) => (
             <form onSubmit={handleSubmit}>
+              <div tw="w-full flex justify-center">
+                <img src="/logo.png" tw="h-48 w-48" />
+              </div>
               <h2 tw="text-center text-4xl font-bold">Parrot.Ai</h2>
               <div tw="mt-10 space-x-11">
                 <label tw="text-lg">Url</label>
-                <Field name="url" component="input" placeholder="url" tw="text-gray-700 text-lg font-bold mb-2"/>
-                <button type="submit" tw="text-lg font-bold py-2 px-4 rounded bg-blue-500 text-white">
+                <Field
+                  name="url"
+                  component="input"
+                  placeholder="url"
+                  tw="text-gray-700 text-lg font-bold mb-2"
+                />
+                <button
+                  type="submit"
+                  tw="text-lg font-bold py-2 px-4 rounded bg-blue-500 text-white"
+                >
                   {"Start"}
                 </button>
               </div>
