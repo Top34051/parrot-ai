@@ -16,7 +16,7 @@ import useStore from "../store";
 import { useRouter } from "next/router";
 import iconv from "iconv-lite";
 import axios from "axios";
-import logo from './logo.png';
+import logo from "./logo.png";
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -42,7 +42,7 @@ const QuestionCom = ({
         <div tw="px-4 justify-self-end cursor-pointer" onClick={click}>
           {Icon}
         </div>
-      </div> 
+      </div>
     </div>
   );
 };
@@ -136,8 +136,6 @@ const Question = () => {
       fetch(audio)
         .then((r) => r.blob())
         .then((blob) => {
-          // const reader = new FileReader();
-          // reader.readAsText(blob);
           let formData = new FormData();
           formData.append("audio_file", blob);
           fetch("http://localhost:8000/transcribe", {
@@ -145,10 +143,6 @@ const Question = () => {
             cache: "no-cache",
             body: formData,
             mode: "cors",
-            // headers: {
-            //   "content-type": "multipart/form-data",
-            //   accept: "multipart/form-data",
-            // },
           })
             .then((resp) => {
               if (resp.status === 200) {
@@ -202,9 +196,9 @@ const Question = () => {
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
       <section tw="absolute top-10 w-full">
-        <div tw="flex justify-between items-center px-10">
+        <div tw="flex justify-between px-10">
           <h1 tw="text-lg font-bold">{formData.title}</h1>
-          <h1 tw="font-bold">Parrot.Ai</h1>
+          <img src={"/logo.png"} tw="h-48 w-36 object-center" />
         </div>
       </section>
       <div tw="w-2/3 block space-y-5">
