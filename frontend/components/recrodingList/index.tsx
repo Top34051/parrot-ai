@@ -5,8 +5,14 @@ import { useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
-export default function RecordingsList({ audio }: RecordingsListProps) {
-  const { recordings, deleteAudio } = useRecordingsList(audio);
+export default function RecordingsList({
+  recordings,
+  deleteAudio,
+}: {
+  recordings: any;
+  deleteAudio: (key: string) => void;
+}) {
+  // const { recordings, deleteAudio } = useRecordingsList(audio);
   const canvasRef = useRef(null);
   const audioRef = useRef(null);
   const recording = recordings.length > 0 ? recordings[0] : null;

@@ -109,6 +109,7 @@ const Sound = ({ text, playCount }: { text: string; playCount: number }) => {
 const Question = () => {
   const { recorderState, ...handlers }: UseRecorder = useRecorder();
   const { audio } = recorderState;
+  const { clearAudio, deleteAudio, recordings } = useRecordingsList(audio);
   const { formData, nq, setNq } = useStore();
   const [titleSCoutner, setTitleSCounter] = useState(0);
   const [descSCounter, setDescSCoutner] = useState(0);
@@ -159,6 +160,7 @@ const Question = () => {
     //   }
     // }
     handlers.cancelRecording();
+    clearAudio();
     console.log("calling");
   }, [nq]);
 
@@ -212,7 +214,10 @@ const Question = () => {
             cText={`A ${nq + 1}`}
             content={
               <>
-                <RecordingsList audio={audio} />
+                <RecordingsList
+                  deleteAudio={deleteAudio}
+                  recordings={recordings}
+                />
                 {transcribed != "" && <p>{transcribed}</p>}
               </>
             }
