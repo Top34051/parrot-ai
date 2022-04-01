@@ -134,19 +134,38 @@ const Question = () => {
       fetch(audio)
         .then((r) => r.blob())
         .then((blob) => {
-          const reader = new FileReader();
-          reader.readAsText(blob, "iso-8852-1");
-          reader.onload = function () {
-            console.log(reader.result);
-            axios
-              .post("http://localhost:8000/transcribe", {
-                audio_content: reader.result,
-              })
-              .then((res) => {
-                setTranscribed(res.data);
-              })
-              .catch(console.log);
-          };
+          // const reader = new FileReader();
+          // reader.readAsText(blob);
+          let formData = new FormData();
+          formData.append("audio_file", blob);
+          fetch("http://localhost:8000/transcribe", {
+            method: "POST",
+            cache: "no-cache",
+            body: formData,
+            headers: { "content-type": "multipart/form-data" },
+          })
+            .then((resp) => {
+              if (resp.status === 200) {
+                console.log(resp);
+              } else {
+                console.error("Error:", resp);
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+
+          // reader.onload = function () {
+          //   console.log(reader.result);
+          //   axios
+          //     .post("http://localhost:8000/transcribe", {
+          //       audio_content: reader.result,
+          //     })
+          //     .then((res) => {
+          //       setTranscribed(res.data);
+          //     })
+          //     .catch(console.log);
+          // };
         })
         .catch(console.log);
     }

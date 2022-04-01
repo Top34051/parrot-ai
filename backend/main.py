@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Form
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -39,11 +39,10 @@ def is_valid_url(url: str):
 
 
 @app.post('/transcribe')
-def transcribe(audio_content: str = Body(..., embed=True)):
-    print(audio_content)
+def transcribe(audio_file: str = Form(...)):
     with open("test.ogg", "wb") as f:
-        f.write(audio_content.encode('iso-8859-1'))
-    return speech_to_text.transcribe(audio_content)
+        f.write(audio_file)
+    return speech_to_text.transcribe(audio_file)
 
 
 @app.post('/forms')
