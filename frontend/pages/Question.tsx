@@ -121,8 +121,10 @@ const Question = () => {
     router.push("/");
     return null;
   }
+
   if (nq >= formData.form_items.length) {
     router.push("/conclusion");
+    return null;
   }
 
   const questionText = `Q${nq + 1}`;
@@ -256,7 +258,7 @@ const Question = () => {
       <div
         tw="absolute bottom-10 right-0 pr-32 pb-4 cursor-pointer"
         onClick={() => {
-          if (nq >= formData.form_items.length) {
+          if (nq >= formData.form_items.length - 1) {
             router.push("/conclusion");
           } else {
             setNq(nq + 1);
