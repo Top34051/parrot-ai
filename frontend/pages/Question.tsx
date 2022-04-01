@@ -8,14 +8,15 @@ import RecorderControls from "../components/renderControl";
 import RecordingsList from "../components/recrodingList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowRight,
+  faCircleArrowRight,
   faVolumeHigh,
-  faArrowLeft,
+  faCircleArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import useStore from "../store";
 import { useRouter } from "next/router";
 import iconv from "iconv-lite";
 import axios from "axios";
+import logo from './logo.png';
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -41,7 +42,7 @@ const QuestionCom = ({
         <div tw="px-4 justify-self-end cursor-pointer" onClick={click}>
           {Icon}
         </div>
-      </div>
+      </div> 
     </div>
   );
 };
@@ -61,7 +62,7 @@ const Arow = ({
         <CircleBox text={cText} />
       </div>
       <div tw="bg-ggg rounded-2xl flex items-center relative p-4 w-4/5">
-        <div tw="font-mono text-black text-xl w-full">{content}</div>
+        <div tw="text-black text-lg w-full">{content}</div>
         {Icon && <div tw="px-4 justify-self-end cursor-pointer">{Icon}</div>}
       </div>
     </div>
@@ -123,7 +124,8 @@ const Question = () => {
   if (nq >= formData.form_items.length) {
     router.push("/conclusion");
   }
-  const questionText = `Q ${nq + 1}`;
+
+  const questionText = `Q${nq + 1}`;
   const questionTitle = formData.form_items[nq].data.text.title;
   const questionDesc = formData.form_items[nq].data.text.description;
   const titleAudio = formData.form_items[nq].data.audio_content.title;
@@ -201,11 +203,11 @@ const Question = () => {
     <div tw="w-screen h-screen flex justify-center items-center">
       <section tw="absolute top-10 w-full">
         <div tw="flex justify-between items-center px-10">
-          <h1 tw="text-lg font-mono font-bold">{formData.title}</h1>
-          <h1>Image Suthita</h1>
+          <h1 tw="text-lg font-bold">{formData.title}</h1>
+          <h1 tw="font-bold">Parrot.Ai</h1>
         </div>
       </section>
-      <div tw="w-2/3 block space-y-10">
+      <div tw="w-2/3 block space-y-5">
         <section tw="space-y-6">
           <Arow
             Icon={null}
@@ -244,7 +246,7 @@ const Question = () => {
                 handlers={handlers}
               />
             }
-            cText={`A ${nq + 1}`}
+            cText={`A${nq + 1}`}
             content={
               <>
                 <RecordingsList
@@ -267,7 +269,7 @@ const Question = () => {
           }
         }}
       >
-        <FontAwesomeIcon icon={faArrowRight} size="6x" />
+        <FontAwesomeIcon icon={faCircleArrowRight} size="3x" />
       </div>
       <div
         tw="absolute bottom-10 left-0 pl-32 pb-4 cursor-pointer"
@@ -279,7 +281,7 @@ const Question = () => {
           }
         }}
       >
-        <FontAwesomeIcon icon={faArrowLeft} size="6x" />
+        <FontAwesomeIcon icon={faCircleArrowLeft} size="3x" />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { Form, Field } from "react-final-form";
 import { useEffect, useState } from "react";
 import useStore from "../store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
