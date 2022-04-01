@@ -7,7 +7,7 @@ class SpeechToText():
         self.client = speech.SpeechClient()
         self.config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.OGG_OPUS,
-            sample_rate_hertz=16000,
+            sample_rate_hertz=48000,
             language_code="en-US",
         )
 

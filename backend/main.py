@@ -41,8 +41,8 @@ def is_valid_url(url: str):
 @app.post('/transcribe')
 def transcribe(audio_file: bytes = File(...)):
     try:
-        # with open("test.ogg", "wb") as f:
-        #     f.write(audio_file)
+        with open("test.ogg", "wb") as f:
+            f.write(audio_file)
         return speech_to_text.transcribe(audio_file)
     except Exception as e:
          print(e)
