@@ -137,12 +137,16 @@ const Question = () => {
           // const reader = new FileReader();
           // reader.readAsText(blob);
           let formData = new FormData();
-          formData.append("audio_file", "hello");
-          fetch("http://localhost:8000/transcribe/", {
+          formData.append("audio_file", blob);
+          fetch("http://localhost:8000/transcribe", {
             method: "POST",
             cache: "no-cache",
             body: formData,
-            headers: { "content-type": "multipart/form-data" },
+            mode: "cors",
+            // headers: {
+            //   "content-type": "multipart/form-data",
+            //   accept: "multipart/form-data",
+            // },
           })
             .then((resp) => {
               if (resp.status === 200) {
@@ -154,6 +158,24 @@ const Question = () => {
             .catch((err) => {
               console.error(err);
             });
+          // fetch("http://localhost:8000/transcribe/", {
+          //   headers: {
+          //     accept: "application/json",
+          //     "accept-language": "en,th-TH;q=0.9,th;q=0.8",
+          //     "content-type": "application/x-www-form-urlencoded",
+          //     "sec-ch-ua":
+          //       '" Not A;Brand";v="99", "Chromium";v="99", "Google Chrome";v="99"',
+          //     "sec-ch-ua-mobile": "?0",
+          //     "sec-ch-ua-platform": '"Windows"',
+          //     "sec-fetch-dest": "empty",
+          //     "sec-fetch-mode": "cors",
+          //     "sec-fetch-site": "same-origin",
+          //   },
+          //   referrer: "http://localhost:8000/docs",
+          //   body: "audio_file=Hi%20my%20name%20",
+          //   method: "POST",
+          //   mode: "cors",
+          // });
 
           // reader.onload = function () {
           //   console.log(reader.result);

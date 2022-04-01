@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -38,14 +38,12 @@ def is_valid_url(url: str):
     return response.status_code == 200
 
 
-@app.post('/transcribe/')
-def transcribe(audio_file: str = Form(...)):
+@app.post('/transcribe')
+def transcribe(audio_file: bytes = File(...)):
     try:
-        print(audio_file)
         # with open("test.ogg", "wb") as f:
         #     f.write(audio_file)
-        # return speech_to_text.transcribe(audio_file)
-        return 200
+        return speech_to_text.transcribe(audio_file)
     except Exception as e:
          print(e)
 
