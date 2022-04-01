@@ -140,7 +140,7 @@ const Question = () => {
         .then((blob) => {
           let formData = new FormData();
           formData.append("audio_file", blob);
-          fetch("http://localhost:8000/transcribe", {
+          fetch("https://parrot-ai-gg.uc.r.appspot.com/transcribe", {
             method: "POST",
             cache: "no-cache",
             body: formData,
