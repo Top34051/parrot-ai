@@ -137,8 +137,8 @@ const Question = () => {
           // const reader = new FileReader();
           // reader.readAsText(blob);
           let formData = new FormData();
-          formData.append("audio_file", blob);
-          fetch("http://localhost:8000/transcribe", {
+          formData.append("audio_file", "hello");
+          fetch("http://localhost:8000/transcribe/", {
             method: "POST",
             cache: "no-cache",
             body: formData,

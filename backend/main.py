@@ -38,11 +38,16 @@ def is_valid_url(url: str):
     return response.status_code == 200
 
 
-@app.post('/transcribe')
+@app.post('/transcribe/')
 def transcribe(audio_file: str = Form(...)):
-    with open("test.ogg", "wb") as f:
-        f.write(audio_file)
-    return speech_to_text.transcribe(audio_file)
+    try:
+        print(audio_file)
+        # with open("test.ogg", "wb") as f:
+        #     f.write(audio_file)
+        # return speech_to_text.transcribe(audio_file)
+        return 200
+    except Exception as e:
+         print(e)
 
 
 @app.post('/forms')
