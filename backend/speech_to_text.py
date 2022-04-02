@@ -6,7 +6,7 @@ class SpeechToText():
     def __init__(self):
         self.client = speech.SpeechClient()
         self.config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.OGG_OPUS,
+            encoding=speech.RecognitionConfig.AudioEncoding.ENCODING_UNSPECIFIED,
             sample_rate_hertz=48000,
             language_code="en-US",
         )

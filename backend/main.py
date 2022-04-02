@@ -1,14 +1,14 @@
 from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
 
-
 import requests
+import io, os
+from pydub import AudioSegment
+from tqdm import tqdm
 
 from form_scraper import extract_form
 from text_to_speech import TextToSpeech
 from speech_to_text import SpeechToText
-
-from tqdm import tqdm
 
 
 app = FastAPI()
@@ -40,13 +40,21 @@ def is_valid_url(url: str):
 
 @app.post('/transcribe')
 def transcribe(audio_file: bytes = File(...)):
-    try:
-        with open("test.ogg", "wb") as f:
-            f.write(audio_file)
-        return speech_to_text.transcribe(audio_file)
-    except Exception as e:
-         print(e)
 
+    os.makedirs('tmp', exist_ok=True)
+    
+    # convert audio file (ogg) to mp3
+    with open('tmp/audio.ogg', 'wb') as f:
+        f.write(audio_file)
+    song = AudioSegment.from_file('tmp/audio.ogg')
+    song.export('tmp/audio.mp3', format="mp3")
+
+    # transcribe audio content
+    with io.open('tmp/audio.mp3', 'rb') as f:
+        content = f.read()
+    transcript = speech_to_text.transcribe(content)
+    return transcript
+   
 
 @app.post('/forms')
 def forms(url: str):
