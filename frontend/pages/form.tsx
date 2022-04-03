@@ -239,7 +239,7 @@ const Question = () => {
         tw="absolute bottom-10 left-0 pl-32 pb-4 cursor-pointer"
         onClick={() => {
           if (nq <= 0) {
-            router.push("/Instruction");
+            router.push("/instruction");
           } else {
             setNq(nq - 1);
           }
