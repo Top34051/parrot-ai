@@ -18,6 +18,7 @@ import iconv from "iconv-lite";
 import { HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
 import { BsRecordFill, BsStopFill } from "react-icons/bs"
 import { FcSpeaker } from "react-icons/fc"
+import Buttons from "../components/buttons";
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -225,6 +226,7 @@ const Question = () => {
           }
         />
       </div>
+      
       <div
         tw="absolute bottom-12 right-12 cursor-pointer"
         onClick={() => {
@@ -235,8 +237,9 @@ const Question = () => {
           }
         }}
       >
-        <HiArrowSmRight size={20} tw='text-white rounded-3xl bg-green-500 h-12 w-24'/>
+        <Buttons.Button buttonType="next" size="normal" />
       </div>
+
       <div
         tw="absolute bottom-12 left-12 cursor-pointer"
         onClick={() => {
@@ -247,7 +250,7 @@ const Question = () => {
           }
         }}
       >
-        <HiArrowSmLeft size={20} tw='text-white rounded-3xl bg-gray-400 h-12 w-24'/>
+        <Buttons.Button buttonType="back" size="normal" />
       </div>
     </div>
   );
