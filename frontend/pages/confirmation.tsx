@@ -1,14 +1,30 @@
 import tw from "twin.macro";
+import useStore from "../store";
+import Link from "next/link";
 
 const Confirmation = () => {
+  
+  const { formData } = useStore();
+
   return (
     <div tw="h-screen w-screen flex items-center justify-center">
-      <section>
-        <h1 tw="text-purple-700 text-3xl">Confirmation</h1>
-        <div>some random text super long</div>
-        <button tw="rounded-2xl px-2 py-1 bg-green-400 text-white">
-          START
-        </button>
+      <section tw='space-y-12 justify-center'>
+        <div tw='space-y-3 text-center'>
+          <h1 tw='text-purple-800 text-7xl font-bold tracking-tight'>{formData?.title}</h1>
+          <p tw='text-lg font-semibold'>{formData?.description}</p>
+        </div>
+        <div tw='flex justify-center'>
+          <Link href='/instruction'>
+            <button tw="
+              rounded-2xl text-white text-2xl font-bold 
+              py-3 px-16 
+              bg-green-500 hover:bg-green-600 active:bg-green-700
+              focus:outline-none focus:ring focus:ring-green-400 
+              ">
+              Confirm
+            </button>
+          </Link>
+        </div>
       </section>
     </div>
   );

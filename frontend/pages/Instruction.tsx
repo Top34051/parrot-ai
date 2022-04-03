@@ -1,12 +1,7 @@
 import tw from "twin.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMicrophone,
-  faSave,
-  faCircleArrowLeft,
-  faCircleArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import { RiArrowRightCircleFill } from "react-icons/ri";
+
 
 const Item = ({ Button, text }: { Button: JSX.Element; text: string }) => {
   return (
@@ -26,26 +21,26 @@ const Instruction = () => {
       <div tw="flex items-center mt-10">
         <section tw="grid grid-rows-4 space-y-2">
           <Item
-            Button={<FontAwesomeIcon icon={faMicrophone} size="2x" />}
+            Button={<RiArrowRightCircleFill />}
             text={"Click to record"}
           />
           <Item
-            Button={<FontAwesomeIcon icon={faSave} size="2x" />}
+            Button={<RiArrowRightCircleFill />}
             text={"Click to stop recording"}
           />
           <Item
-            Button={<FontAwesomeIcon icon={faCircleArrowLeft} size="2x" />}
+            Button={<RiArrowRightCircleFill />}
             text={"Click to confirm and go to next question"}
           />
           <Item
-            Button={<FontAwesomeIcon icon={faCircleArrowRight} size="2x" />}
+            Button={<RiArrowRightCircleFill />}
             text={"Click to go back to the previous question"}
           />
         </section>
       </div>
-      <div tw="absolute bottom-10 right-0 pr-32 pb-4 cursor-pointer">
+      <div tw="absolute bottom-8 right-0 pr-14 pb-4 cursor-pointer">
         <Link href="/Question">
-          <FontAwesomeIcon icon={faCircleArrowRight} size="3x"/>
+          <RiArrowRightCircleFill size={60} color='green'/>
         </Link>
       </div>
     </div>

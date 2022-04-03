@@ -8,12 +8,7 @@ import { CgSpinner } from "react-icons/cg";
 const config = require('../config')
 
 
-const IsLoadingComp = () => {
-  return <div></div>;
-};
-
-
-const IndexPage = () => {
+const Index = () => {
 
   const router = useRouter();
   const [inputUrl,  setinputUrl]  = useState<string>("");
@@ -58,8 +53,8 @@ const IndexPage = () => {
       .then((res) => {
         setFormData(res);
         setTimeout(() => {
-          router.push("/Instruction");
-        }, 500);
+          router.push("/confirmation");
+        }, 1000);
         setIsLoading(false);
       })
       .catch(console.error);
@@ -75,11 +70,12 @@ const IndexPage = () => {
             <form onSubmit={handleSubmit} tw='space-y-20'>
               <h2 tw="text-center text-8xl tracking-tight font-bold">Parrot.AI 🦜</h2>
               <div tw="space-x-3 flex justify-center">
+
                 <Field
                   name="url"
                   component="input"
                   placeholder="Enter Google Form URL"
-                  tw="text-xl rounded-xl border bg-gray-200 p-2 pl-4 w-128 flex"
+                  tw="text-xl rounded-2xl border bg-gray-100 p-2 pl-4 w-128 flex"
                 />
 
                 {/* Not submitted and not loading */}
@@ -87,8 +83,8 @@ const IndexPage = () => {
                   tw="
                     flex items-center
                     text-white text-xl font-semibold 
-                    py-2 px-4 rounded-xl 
-                    bg-purple-500 hover:bg-purple-600 active:bg-purple-700
+                    py-2 px-4 rounded-2xl 
+                    bg-purple-600 hover:bg-purple-700 active:bg-purple-800
                     focus:outline-none focus:ring focus:ring-purple-300 
                   "
                 >
@@ -100,7 +96,7 @@ const IndexPage = () => {
                   tw="
                     flex items-center space-x-2
                     text-white text-xl font-semibold 
-                    py-2 px-4 rounded-xl 
+                    py-2 px-4 rounded-2xl 
                     bg-gray-500
                   "
                 >
@@ -113,7 +109,7 @@ const IndexPage = () => {
                   tw="
                     flex items-center
                     text-white text-xl font-semibold 
-                    py-2 px-4 rounded-xl
+                    py-2 px-4 rounded-2xl
                     bg-green-500
                   "
                 >
@@ -128,4 +124,4 @@ const IndexPage = () => {
   );
 };
 
-export default IndexPage;
+export default Index;
