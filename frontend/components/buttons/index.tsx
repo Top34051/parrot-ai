@@ -25,7 +25,7 @@ function Button({
     if (buttonType === 'start-record') {
         return (
             <button>
-                {size === 'normal' && <BsRecordFill size={10} color='#de5246' tw='text-white rounded-3xl bg-gray-300 h-12 w-24 p-1'/>}
+                {size === 'normal' && <BsRecordFill size={10} color='#de5246' tw='text-white rounded-full bg-gray-300 h-16 w-16 p-2'/>}
                 {size === 'mini' && <BsRecordFill size={10} color='#de5246' tw='text-white rounded-3xl bg-gray-300 h-9 w-14 p-1'/>}
             </button>
         );
@@ -34,7 +34,7 @@ function Button({
     if (buttonType === 'stop-record') {
         return (
             <button>
-                {size === 'normal' && <BsStopFill size={10} color='#de5246' tw='text-white rounded-3xl bg-gray-300 h-12 w-24 p-1'/>}
+                {size === 'normal' && <BsStopFill size={10} color='#de5246' tw='text-white rounded-full bg-gray-300 h-16 w-16 p-2'/>}
                 {size === 'mini' && <BsStopFill size={10} color='#de5246' tw='text-white rounded-3xl bg-gray-300 h-9 w-14 p-1'/>}
             </button>
         );

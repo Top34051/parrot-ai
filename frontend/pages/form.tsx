@@ -179,6 +179,7 @@ const Question = () => {
       </section>
       
       <div tw="flex flex-col justify-center space-y-3 w-4/6">
+
         <Card
           Icon={null}
           text={questionText}
@@ -207,6 +208,7 @@ const Question = () => {
             </div>
           }
         />
+        
         <Card
           Icon={
             <RecorderControls
