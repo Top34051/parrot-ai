@@ -8,6 +8,11 @@ const Confirmation = () => {
 
   return (
     <div tw="h-screen w-screen flex items-center justify-center">
+
+      <section tw="absolute top-12 right-12">
+        <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
+      </section>
+
       <section tw='space-y-12 justify-center'>
         <div tw='space-y-3 text-center'>
           <h1 tw='text-purple-800 text-7xl font-bold tracking-tight'>{formData?.title}</h1>

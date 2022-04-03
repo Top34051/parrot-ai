@@ -29,7 +29,12 @@ const Item = ({ Button, text }: { Button: JSX.Element; text: string }) => {
 const Instruction = () => {
   return (
     <div tw="h-screen w-screen px-32 py-20 space-y-10">
-      <h1 tw="text-7xl text-left font-bold">
+
+      <section tw="absolute top-12 right-12">
+        <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
+      </section>
+
+      <h1 tw="text-6xl text-left font-bold">
         Instructions
       </h1>
       <div tw='space-y-4'>
