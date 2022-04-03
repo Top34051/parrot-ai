@@ -15,10 +15,13 @@ import {
 import useStore from "../store";
 import { useRouter } from "next/router";
 import iconv from "iconv-lite";
+import { HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
+import { BsRecordFill, BsStopFill } from "react-icons/bs"
+import { FcSpeaker } from "react-icons/fc"
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
-    <div tw="rounded-full w-12 h-12 bg-purple-600 text-white flex justify-center items-center">
+    <div tw="rounded-full w-14 h-14 bg-purple-600 font-semibold text-lg text-white flex justify-center items-center">
       <div>{text}</div>
     </div>
   );
@@ -45,22 +48,18 @@ const QuestionCom = ({
   );
 };
 
-const Arow = ({
-  cText,
-  content,
-  Icon,
-}: {
-  cText: string;
+const Card = ({ text, content, Icon }: { 
+  text: string; 
   content: JSX.Element;
   Icon: JSX.Element | null;
 }) => {
   return (
-    <div tw="items-center relative flex space-x-4 w-full">
+    <div tw="flex w-full space-x-3 items-center">
       <div>
-        <CircleBox text={cText} />
+        <CircleBox text={text} />
       </div>
-      <div tw="bg-ggg rounded-2xl flex items-center relative p-4 w-4/5">
-        <div tw="text-black text-lg w-full">{content}</div>
+      <div tw="bg-gray-200 rounded-xl flex justify-between p-4 w-full">
+        <div tw="w-4/5">{content}</div>
         {Icon && <div tw="px-4 justify-self-end cursor-pointer">{Icon}</div>}
       </div>
     </div>
@@ -105,10 +104,11 @@ const Sound = ({ text, playCount }: { text: string; playCount: number }) => {
 };
 
 const Question = () => {
+
   const { recorderState, ...handlers }: UseRecorder = useRecorder();
   const { audio } = recorderState;
   const { clearAudio, deleteAudio, recordings } = useRecordingsList(audio);
-  const { formData, nq, setNq } = useStore();
+  const { url, formData, nq, setNq } = useStore();
   const [titleSCoutner, setTitleSCounter] = useState(0);
   const [descSCounter, setDescSCoutner] = useState(0);
   const [transcribed, setTranscribed] = useState("");
@@ -164,67 +164,69 @@ const Question = () => {
   }, [nq]);
 
   return (
+
     <div tw="w-screen h-screen flex justify-center items-center">
-      <section tw="absolute top-10 w-full">
-        <div tw="flex justify-between px-10">
-          <h1 tw="text-lg font-bold">{formData.title}</h1>
-          <img src={"/logo.png"} tw="h-48 w-36 object-center" />
+
+      <section tw="absolute top-12 w-full">
+        <div tw="flex justify-between px-12">
+          <div>
+            <h1 tw="text-2xl font-bold">{formData.title}</h1> 
+            <p>Gooogle Form: <span><a href={url} tw='text-purple-800'>{url}</a></span></p>
+          </div>
+          <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
         </div>
       </section>
-      <div tw="w-2/3 block space-y-5">
-        <section tw="space-y-6">
-          <Arow
-            Icon={null}
-            cText={questionText}
-            content={
-              <div>
-                <QuestionCom
-                  Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
-                  click={() => {
-                    setTitleSCounter(titleSCoutner + 1);
-                  }}
-                  text={questionTitle}
-                />
-                <Sound text={titleAudio} playCount={titleSCoutner} />
-                {questionDesc && (
-                  <>
-                    <QuestionCom
-                      Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
-                      click={() => {
-                        setDescSCoutner(descSCounter + 1);
-                      }}
-                      text={questionDesc}
-                    />
-                    <Sound text={descAudio} playCount={descSCounter} />{" "}
-                  </>
-                )}
-              </div>
-            }
-          />
-        </section>
-        <section>
-          <Arow
-            Icon={
-              <RecorderControls
-                recorderState={recorderState}
-                handlers={handlers}
+      
+      <div tw="flex flex-col justify-center space-y-3 w-4/6">
+        <Card
+          Icon={null}
+          text={questionText}
+          content={
+            <div>
+              <QuestionCom
+                Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
+                click={() => {
+                  setTitleSCounter(titleSCoutner + 1);
+                }}
+                text={questionTitle}
               />
-            }
-            cText={`A${nq + 1}`}
-            content={
-              <>
-                <RecordingsList
-                  deleteAudio={deleteAudio}
-                  recordings={recordings}
-                />
-                {transcribed != "" && <p>{transcribed}</p>}
-              </>
-            }
-          />
-        </section>
+              <Sound text={titleAudio} playCount={titleSCoutner} />
+              {questionDesc && (
+                <>
+                  <QuestionCom
+                    Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
+                    click={() => {
+                      setDescSCoutner(descSCounter + 1);
+                    }}
+                    text={questionDesc}
+                  />
+                  <Sound text={descAudio} playCount={descSCounter} />{" "}
+                </>
+              )}
+            </div>
+          }
+        />
+        <Card
+          Icon={
+            <RecorderControls
+              recorderState={recorderState}
+              handlers={handlers}
+            />
+          }
+          text={`A${nq + 1}`}
+          content={
+            <>
+              <RecordingsList
+                deleteAudio={deleteAudio}
+                recordings={recordings}
+              />
+              {transcribed != "" && <p>{transcribed}</p>}
+            </>
+          }
+        />
       </div>
       <div
-        tw="absolute bottom-10 right-0 pr-32 pb-4 cursor-pointer"
+        tw="absolute bottom-12 right-12 cursor-pointer"
         onClick={() => {
           if (nq >= formData.form_items.length - 1) {
             router.push("/conclusion");
@@ -233,10 +235,10 @@ const Question = () => {
           }
         }}
       >
-        <FontAwesomeIcon icon={faCircleArrowRight} size="3x" />
+        <HiArrowSmRight size={20} tw='text-white rounded-3xl bg-green-500 h-12 w-24'/>
       </div>
       <div
-        tw="absolute bottom-10 left-0 pl-32 pb-4 cursor-pointer"
+        tw="absolute bottom-12 left-12 cursor-pointer"
         onClick={() => {
           if (nq <= 0) {
             router.push("/instruction");
@@ -245,7 +247,7 @@ const Question = () => {
           }
         }}
       >
-        <FontAwesomeIcon icon={faCircleArrowLeft} size="3x" />
+        <HiArrowSmLeft size={20} tw='text-white rounded-3xl bg-gray-400 h-12 w-24'/>
       </div>
     </div>
   );
