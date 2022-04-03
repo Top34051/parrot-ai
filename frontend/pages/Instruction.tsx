@@ -51,4 +51,5 @@ const Instruction = () => {
     </div>
   );
 };
+
 export default Instruction;

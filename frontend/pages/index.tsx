@@ -3,59 +3,68 @@ import { Form, Field } from "react-final-form";
 import { useEffect, useState } from "react";
 import useStore from "../store";
 import { useRouter } from "next/router";
+import { CgSpinner } from "react-icons/cg";
+
+const config = require('../config')
+
 
 const IsLoadingComp = () => {
   return <div></div>;
 };
 
+
 const IndexPage = () => {
-  const [inputDat, setInputDat] = useState<string>("");
-  const [isCheck, setIsCheck] = useState(false);
-  const { setUrl, formData, setFormData } = useStore();
+
   const router = useRouter();
+  const [inputUrl,  setinputUrl]  = useState<string>("");
+  const [isValid,   setIsValid]   = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { setUrl, formData, setFormData } = useStore();
 
   const onSubmit = (data: any) => {
-    setInputDat(data.url);
+    setinputUrl(data.url);
   };
 
   useEffect(() => {
-    if (!isCheck) {
-      fetch(
-        "https://parrot-ai-gg.uc.r.appspot.com/is_valid_url?" +
-          new URLSearchParams({ url: inputDat }).toString()
-      )
-        .then((res) => {
-          setIsCheck(res.status === 200);
-          setUrl(inputDat);
-        })
-        .catch(console.log);
-    } else if (!formData) {
+
+    if (!isValid) {
+
+      const apiEndpoint = config.apiUrl + '/is_valid_url'
+      const url = apiEndpoint + '?' + new URLSearchParams({ url: inputUrl }).toString()
+      
+      fetch(url).then((res) => {
+        setIsValid(res.status === 200);
+        setUrl(inputUrl);
+      })
+      .catch(console.log);
+    } 
+  
+    if (isValid && !formData) {
+
+      const apiEndpoint = config.apiUrl + '/forms'
+      const url = apiEndpoint + '?' + new URLSearchParams({ url: inputUrl }).toString()
+
       setIsLoading(true);
-      fetch(
-        `https://parrot-ai-gg.uc.r.appspot.com/forms?` +
-          new URLSearchParams({ url: inputDat }).toString(),
-        {
-          method: "POST",
-          mode: "cors",
-          cache: "no-cache",
-          headers: {
-            "Content-type": "application/json",
-            accept: "application/json",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((res) => {
-          setFormData(res);
-          setTimeout(() => {
-            router.push("/Instruction");
-          }, 1000);
-          setIsLoading(false);
-        })
-        .catch(console.error);
+      fetch(url, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+          "Content-type": "application/json",
+          accept: "application/json",
+        },
+      })
+      .then((res) => res.json())
+      .then((res) => {
+        setFormData(res);
+        setTimeout(() => {
+          router.push("/Instruction");
+        }, 500);
+        setIsLoading(false);
+      })
+      .catch(console.error);
     }
-  }, [inputDat, isCheck]);
+  }, [inputUrl, isValid]);
 
   return (
     <div tw="flex justify-center items-center w-screen h-screen">
@@ -63,30 +72,57 @@ const IndexPage = () => {
         <Form
           onSubmit={onSubmit}
           render={({ handleSubmit }) => (
-            <form onSubmit={handleSubmit}>
-              <div tw="w-full flex justify-center">
-                <img src="/logo.png" tw="h-48 w-48" />
-              </div>
-              <h2 tw="text-center text-4xl font-bold">Parrot.Ai</h2>
-              <div tw="mt-10 space-x-11">
+            <form onSubmit={handleSubmit} tw='space-y-20'>
+              <h2 tw="text-center text-8xl tracking-tight font-bold">Parrot.AI 🦜</h2>
+              <div tw="space-x-3 flex justify-center">
                 <Field
                   name="url"
                   component="input"
-                  placeholder="url"
-                  tw="text-gray-700 text-lg font-bold mb-2 rounded-xl"
+                  placeholder="Enter Google Form URL"
+                  tw="text-xl rounded-xl border bg-gray-200 p-2 pl-4 w-128 flex"
                 />
-                <button
-                  type="submit"
-                  tw="text-lg font-bold py-2 px-4 rounded bg-blue-500 text-white"
+
+                {/* Not submitted and not loading */}
+                {!formData && !isLoading && <button
+                  tw="
+                    flex items-center
+                    text-white text-xl font-semibold 
+                    py-2 px-4 rounded-xl 
+                    bg-purple-500 hover:bg-purple-600 active:bg-purple-700
+                    focus:outline-none focus:ring focus:ring-purple-300 
+                  "
                 >
-                  {"Start"}
-                </button>
+                  {"Fill form"}
+                </button>}
+
+                {/* Not submitted but loading */}
+                {!formData && isLoading && <div
+                  tw="
+                    flex items-center space-x-2
+                    text-white text-xl font-semibold 
+                    py-2 px-4 rounded-xl 
+                    bg-gray-500
+                  "
+                >
+                  <CgSpinner tw="animate-spin w-5 h-5"/>
+                  <p>Loading...</p>
+                </div>}
+
+                {/* Submitted */}
+                {formData && <div
+                  tw="
+                    flex items-center
+                    text-white text-xl font-semibold 
+                    py-2 px-4 rounded-xl
+                    bg-green-500
+                  "
+                >
+                  {"Form loaded "}
+                </div>}
               </div>
             </form>
           )}
         />
-        {formData && <p tw="text-green-600">Information Loaded</p>}
-        {isLoading && <IsLoadingComp />}
       </section>
     </div>
   );

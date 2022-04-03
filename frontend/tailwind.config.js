@@ -6,6 +6,9 @@ module.exports = {
         ribbon: "#0047ff",
         ggg: "#e3e3e3",
       },
+      width: {
+        '128': '36rem'
+      }
     },
   },
   plugins: [],
