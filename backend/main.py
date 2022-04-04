@@ -1,15 +1,13 @@
 from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 
 import requests
-import io, os
-from pydub import AudioSegment
 from tqdm import tqdm
 
 from form_scraper import extract_form
 from text_to_speech import TextToSpeech
 from speech_to_text import SpeechToText
+from convert_audio import convert_audio_file
 
 
 app = FastAPI()
@@ -41,39 +39,14 @@ def is_valid_url(url: str):
 
 @app.post('/convert_audio')
 def convert_audio(audio_file: bytes = File(...)):
-
-    print(audio_file)
-
-    os.makedirs('tmp', exist_ok=True)
-    
-    with open('tmp/audio.ogg', 'wb') as f:
-        f.write(audio_file)
-
-    song = AudioSegment.from_file('tmp/audio.ogg')
-    song.export('tmp/audio.mp3', format="mp3")
-
-    with io.open('tmp/audio.mp3', 'rb') as f:
-        content = f.read()
-
+    content = convert_audio_file(audio_file)
     return content.decode('iso-8859-1')
 
 
 @app.post('/get_transcript')
 def transcribe(audio_file: bytes = File(...)):
-
-    os.makedirs('tmp', exist_ok=True)
-    
-    with open('tmp/audio.ogg', 'wb') as f:
-        f.write(audio_file)
-
-    song = AudioSegment.from_file('tmp/audio.ogg')
-    song.export('tmp/audio.mp3', format="mp3")
-
-    with io.open('tmp/audio.mp3', 'rb') as f:
-        content = f.read()
-
-    transcript = speech_to_text.transcribe(content)
-    return transcript
+    content = convert_audio_file(audio_file)
+    return speech_to_text.transcribe(content)
    
 
 @app.post('/forms')
@@ -111,7 +84,5 @@ def forms(url: str):
             },
             'required': item['required']
         })
-
-    print(form)
 
     return form

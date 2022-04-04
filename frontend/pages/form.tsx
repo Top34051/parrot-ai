@@ -5,13 +5,6 @@ import useRecorder from "../hooks/use-recorder";
 import { UseRecorder } from "../types/recorder";
 import useRecordingsList from "../hooks/use-recordings-list";
 import RecorderControls from "../components/renderControl";
-import RecordingsList from "../components/recrodingList";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleArrowRight,
-  faVolumeHigh,
-  faCircleArrowLeft,
-} from "@fortawesome/free-solid-svg-icons";
 import useStore from "../store";
 import { useRouter } from "next/router";
 import iconv from "iconv-lite";
@@ -121,7 +114,7 @@ const Form = () => {
   }
 
   if (questionIndex >= formData.form_items.length) {
-    router.push("/conclusion");
+    router.push("/submission");
     return null;
   }
 
@@ -249,7 +242,7 @@ const Form = () => {
       <div
         tw="absolute bottom-12 right-12 cursor-pointer"
         onClick={() => {
-          if (questionIndex >= formData.form_items.length - 1) router.push("/conclusion");
+          if (questionIndex >= formData.form_items.length - 1) router.push("/submission");
           else setQuestionIndex(questionIndex + 1);
         }}
       >

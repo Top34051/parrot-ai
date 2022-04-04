@@ -4,7 +4,7 @@ import useStore from "../store";
 import config from "../config/index";
 import { CgSpinner } from "react-icons/cg";
 
-const Conclusion = () => {
+const Submission = () => {
   const [isSending, setIsSending] = useState(true);
   const { answers } = useStore();
 
@@ -26,10 +26,15 @@ const Conclusion = () => {
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
-      <p tw="text-4xl font-mono">Thank You for submitting form with us!</p>
-      {isSending && <CgSpinner tw="animate-spin w-5 h-5" />}
+      
+      <section tw="absolute top-12 right-12">
+        <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
+      </section>
+
+      <p tw="text-6xl font-bold"> Your form has been submitted.</p>
+
     </div>
   );
 };
 
-export default Conclusion;
+export default Submission;
