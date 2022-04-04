@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File
+from fastapi import FastAPI, File, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 import requests
@@ -86,3 +86,9 @@ def forms(url: str):
         })
 
     return form
+
+@app.post('/submit')
+async def submit(request: Request):
+    form_data = await request.form()
+    print(form_data)
+    return ""    

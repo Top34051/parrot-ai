@@ -49,6 +49,9 @@ const Instruction = () => {
       <div tw="absolute bottom-12 right-12 cursor-pointer">
         <Buttons.LinkedButton buttonType="next" size="normal" href="/form" />
       </div>
+      <div tw="absolute bottom-12 left-12 cursor-pointer">
+        <Buttons.LinkedButton buttonType="back" size="normal" href="/confirmation" />
+      </div>
     </div>
   );
 };

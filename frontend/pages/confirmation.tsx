@@ -1,6 +1,7 @@
 import tw from "twin.macro";
 import useStore from "../store";
 import Link from "next/link";
+import Buttons from "../components/buttons";
 
 const Confirmation = () => {
   const { formData } = useStore();

@@ -2,7 +2,7 @@ import tw from "twin.macro";
 import { useState, useEffect } from "react";
 import useStore from "../store";
 import config from "../config/index";
-import { CgSpinner } from "react-icons/cg";
+import Link from "next/link";
 
 const Submission = () => {
 
@@ -10,10 +10,13 @@ const Submission = () => {
 
   useEffect(() => {
     let formData = new FormData();
+    formData.append("url", url);
+    formData.append("num_questions", answers.length.toString());
     for (let i = 0; i < answers.length; i++) {
-      formData.append("ans" + i + "_audio", answers[i].audio);
-      formData.append("ans" + i + "_text", answers[i].text);
+      formData.append("audio_" + i, answers[i].audio);
+      formData.append("text_" + i, answers[i].text);
     }
+    console.log(formData);
     fetch(`${config.apiUrl}/submit`, {
       method: "POST",
       cache: "no-cache",
@@ -42,7 +45,23 @@ const Submission = () => {
         </div>
       </section>
 
-      <p tw="text-6xl font-bold"> Your form has been submitted!</p>
+      <div tw='flex flex-col space-y-14'>
+        <p tw="text-6xl font-bold"> Your form has been submitted!</p>
+        <div tw="flex justify-center">
+          <Link href="/confirmation">
+            <button
+              tw="
+              rounded-2xl text-white text-2xl font-bold 
+              py-3 px-16 
+              bg-green-500 hover:bg-green-600 active:bg-green-700
+              focus:outline-none focus:ring focus:ring-green-400 
+              "
+            >
+              Submit another form
+            </button>
+          </Link>
+        </div>
+      </div>
 
     </div>
   );
