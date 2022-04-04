@@ -109,6 +109,23 @@ const Sound = ({ text, playCount }: { text: string; playCount: number }) => {
   return null;
 };
 
+const Bouncing = () => (
+  <div tw="flex space-x-2 p-2">
+    <div
+      tw="bg-blue-600 p-2  w-4 h-4 rounded-full animate-bounce"
+      style={{ animationDelay: "0.1s" }}
+    ></div>
+    <div
+      tw="bg-green-600 p-2 w-4 h-4 rounded-full animate-bounce"
+      style={{ animationDelay: "0.2s" }}
+    ></div>
+    <div
+      tw="bg-red-600 p-2  w-4 h-4 rounded-full animate-bounce"
+      style={{ animationDelay: "0.3s" }}
+    ></div>
+  </div>
+);
+
 const Question = () => {
   const { recorderState, ...handlers }: UseRecorder = useRecorder();
   const { audio } = recorderState;
@@ -230,7 +247,7 @@ const Question = () => {
           content={
             <>
               {/* <RecordingsList recordings={audio} /> */}
-              {transcribed == "" ? <p>No audio</p> : <p>{transcribed}</p>}
+              {transcribed == "" ? <Bouncing /> : <p>{transcribed}</p>}
             </>
           }
         />

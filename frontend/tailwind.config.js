@@ -7,8 +7,13 @@ module.exports = {
         ggg: "#e3e3e3",
       },
       width: {
-        '128': '40rem'
-      }
+        128: "40rem",
+      },
+    },
+  },
+  variants: {
+    extend: {
+      animation: ["group-hover"],
     },
   },
   plugins: [],
