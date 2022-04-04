@@ -5,8 +5,8 @@ import config from "../config/index";
 import { CgSpinner } from "react-icons/cg";
 
 const Submission = () => {
-  const [isSending, setIsSending] = useState(true);
-  const { answers } = useStore();
+
+  const { url, formData, answers } = useStore();
 
   useEffect(() => {
     let formData = new FormData();
@@ -19,19 +19,30 @@ const Submission = () => {
       cache: "no-cache",
       body: formData,
       mode: "no-cors",
-    })
-      .then((res) => setIsSending(!(res.status == 200)))
-      .catch(console.log);
+    }).catch(console.log);
   }, [answers]);
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
       
-      <section tw="absolute top-12 right-12">
-        <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
+      <section tw="absolute top-12 w-full">
+        <div tw="flex justify-between px-12">
+          <div>
+            <h1 tw="text-2xl font-bold">{formData?.title}</h1>
+            <p>
+              Gooogle Form:{" "}
+              <span>
+                <a href={url} tw="text-purple-800">
+                  {url}
+                </a>
+              </span>
+            </p>
+          </div>
+          <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
+        </div>
       </section>
 
-      <p tw="text-6xl font-bold"> Your form has been submitted.</p>
+      <p tw="text-6xl font-bold"> Your form has been submitted!</p>
 
     </div>
   );

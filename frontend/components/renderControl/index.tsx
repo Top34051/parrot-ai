@@ -12,7 +12,7 @@ export default function RecorderControls({
   const { startRecording, saveRecording } = handlers;
   
   return (
-    <div tw="flex flex-col justify-center items-center">
+    <div tw="flex justify-center items-center space-x-3">
   
       {initRecording ? (
         <button
@@ -33,7 +33,7 @@ export default function RecorderControls({
         </button>
       )}
 
-      <div tw="flex justify-center">
+      <div tw="flex justify-center rounded-lg w-16 bg-gray-300 p-1">
         {initRecording && <div className="recording-indicator"></div>}
         <div>{formatMinutes(recordingMinutes)}</div>
         <div>:</div>
