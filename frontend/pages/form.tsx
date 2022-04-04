@@ -16,9 +16,10 @@ import useStore from "../store";
 import { useRouter } from "next/router";
 import iconv from "iconv-lite";
 import { HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
-import { BsRecordFill, BsStopFill } from "react-icons/bs"
-import { FcSpeaker } from "react-icons/fc"
+import { BsRecordFill, BsStopFill } from "react-icons/bs";
+import { FcSpeaker } from "react-icons/fc";
 import Buttons from "../components/buttons";
+const config = require("../config");
 
 const CircleBox = ({ text }: { text: string }) => {
   return (
@@ -49,8 +50,12 @@ const QuestionCom = ({
   );
 };
 
-const Card = ({ text, content, Icon }: { 
-  text: string; 
+const Card = ({
+  text,
+  content,
+  Icon,
+}: {
+  text: string;
   content: JSX.Element;
   Icon: JSX.Element | null;
 }) => {
@@ -105,7 +110,6 @@ const Sound = ({ text, playCount }: { text: string; playCount: number }) => {
 };
 
 const Question = () => {
-
   const { recorderState, ...handlers }: UseRecorder = useRecorder();
   const { audio } = recorderState;
   const { clearAudio, deleteAudio, recordings } = useRecordingsList(audio);
@@ -138,8 +142,8 @@ const Question = () => {
         .then((blob) => {
           let formData = new FormData();
           formData.append("audio_file", blob);
-          fetch('http://localhost:8000/transcribe', {
-          // fetch("https://parrot-ai-gg.uc.r.appspot.com/transcribe", {
+          fetch(`${config.apiUrl}/transcribe`, {
+            // fetch("https://parrot-ai-gg.uc.r.appspot.com/transcribe", {
             method: "POST",
             cache: "no-cache",
             body: formData,
@@ -165,21 +169,25 @@ const Question = () => {
   }, [nq]);
 
   return (
-
     <div tw="w-screen h-screen flex justify-center items-center">
-
       <section tw="absolute top-12 w-full">
         <div tw="flex justify-between px-12">
           <div>
-            <h1 tw="text-2xl font-bold">{formData.title}</h1> 
-            <p>Gooogle Form: <span><a href={url} tw='text-purple-800'>{url}</a></span></p>
+            <h1 tw="text-2xl font-bold">{formData.title}</h1>
+            <p>
+              Gooogle Form:{" "}
+              <span>
+                <a href={url} tw="text-purple-800">
+                  {url}
+                </a>
+              </span>
+            </p>
           </div>
           <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
         </div>
       </section>
-      
-      <div tw="flex flex-col justify-center space-y-3 w-4/6">
 
+      <div tw="flex flex-col justify-center space-y-3 w-4/6">
         <Card
           Icon={null}
           text={questionText}
@@ -208,7 +216,7 @@ const Question = () => {
             </div>
           }
         />
-        
+
         <Card
           Icon={
             <RecorderControls
@@ -228,7 +236,7 @@ const Question = () => {
           }
         />
       </div>
-      
+
       <div
         tw="absolute bottom-12 right-12 cursor-pointer"
         onClick={() => {
