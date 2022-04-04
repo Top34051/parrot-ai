@@ -51,28 +51,24 @@ def transcribe(audio_file: bytes = File(...)):
 
 @app.post('/forms')
 def forms(url: str):
-    
     raw_form = extract_form(url)
-
     print('Generating audio for the form')
-
     form = {
         'title': raw_form['title'],
         'description': raw_form['description'],
         'form_items': []
     }
-
     for item in tqdm(raw_form['form_items']):
-
+        
         text = item['data']['text']
 
         form_text = text['title'] + '\n' + text['description']
         for option in text['options']:
-            form_text += '\n' + option
+            form_text += '\n' + '● ' + option
 
-        form_audio = text['title'] + '\n' + text['description']
+        form_audio = text['title'] + '.\n' + text['description']
         for idx, option in enumerate(text['options']):
-            form_audio += '\n' + 'Option {}: '.format(idx + 1) + option
+            form_audio += '\n' + 'Option {}: '.format(idx + 1) + option + '.'
         form_audio = form_audio.replace('*', '')
         form_audio = text_to_speech.synthesize(form_audio)
 

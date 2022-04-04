@@ -3,27 +3,46 @@ import { useState, useEffect } from "react";
 import useStore from "../store";
 import config from "../config/index";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import Buttons from "../components/buttons";
+
 
 const Submission = () => {
 
-  const { url, formData, answers } = useStore();
+  const router = useRouter();
+
+  const { url, formData, answers, resetAnswers, setQuestionIndex } = useStore();
+  const [canSubmit, setCanSubmit] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    let formData = new FormData();
-    formData.append("url", url);
-    formData.append("num_questions", answers.length.toString());
+    let invalid = false;
     for (let i = 0; i < answers.length; i++) {
-      formData.append("audio_" + i, answers[i].audio);
-      formData.append("text_" + i, answers[i].text);
+      if (formData?.form_items[i].required && answers[i].text === "") invalid = true;
     }
-    console.log(formData);
-    fetch(`${config.apiUrl}/submit`, {
-      method: "POST",
-      cache: "no-cache",
-      body: formData,
-      mode: "no-cors",
-    }).catch(console.log);
+    setCanSubmit(!invalid);
   }, [answers]);
+
+  useEffect(() => {
+    if (canSubmit) {
+      let formData = new FormData();
+      formData.append("url", url);
+      formData.append("num_questions", answers.length.toString());
+      for (let i = 0; i < answers.length; i++) {
+        formData.append("audio_" + i, answers[i].audio);
+        formData.append("text_" + i, answers[i].text);
+      }
+      fetch(`${config.apiUrl}/submit`, {
+        method: "POST",
+        cache: "no-cache",
+        body: formData,
+        mode: "no-cors",
+      }).catch(console.log);
+      setQuestionIndex(0);
+      resetAnswers(answers.length);
+      setIsSubmitted(true);
+    }
+  }, [canSubmit]);
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
@@ -45,7 +64,11 @@ const Submission = () => {
         </div>
       </section>
 
-      <div tw='flex flex-col space-y-14'>
+      {!isSubmitted && <div tw='flex flex-col space-y-14'>
+        <p tw="text-4xl font-bold"> Please answer all the required questions.</p>
+      </div>}
+
+      {isSubmitted && <div tw='flex flex-col space-y-14'>
         <p tw="text-6xl font-bold"> Your form has been submitted!</p>
         <div tw="flex justify-center">
           <Link href="/confirmation">
@@ -61,6 +84,13 @@ const Submission = () => {
             </button>
           </Link>
         </div>
+      </div>}
+
+      <div
+        tw="absolute bottom-12 left-12 cursor-pointer"
+        onClick={() => { router.push("/form"); }}
+      >
+        <Buttons.Button buttonType="back" size="normal" />
       </div>
 
     </div>

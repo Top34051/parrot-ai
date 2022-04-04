@@ -29,6 +29,7 @@ export interface storeType {
   setQuestionIndex: (questionIndex: number) => void;
   answers: Answer[];
   setAnswer: (questionIndex: number, answer: Answer) => void;
+  resetAnswers: (length: number) => void;
 }
 
 const useStore = create<storeType>((set) => ({
@@ -51,6 +52,14 @@ const useStore = create<storeType>((set) => ({
       questionIndex,
     })),
   answers: [],
+  resetAnswers: (length) =>
+    set((state) => ({
+      ...state,
+      answers: new Array(length).fill({
+        audio: null,
+        text: ''
+      })
+    })),
   setAnswer: (questionIndex, answer) =>
     set((state) => ({
       ...state,
@@ -59,7 +68,7 @@ const useStore = create<storeType>((set) => ({
         answer,
         ...state.answers.slice(questionIndex+1),
       ],
-    })),
+    }))
 }));
 
 export default useStore;

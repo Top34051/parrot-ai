@@ -15,25 +15,24 @@ export default function RecorderControls({
     <div tw="flex justify-center items-center space-x-3">
   
       {initRecording ? (
-        <button
+        <div
           className="start-button"
           title="Save recording"
-          disabled={recordingSeconds === 0}
-          onClick={saveRecording}
+          tw="flex"
         >
-          <Buttons.Button buttonType="stop-record" size="normal" />
-        </button>
+          <Buttons.Button buttonType="stop-record" size="normal" onClick={saveRecording}/>
+        </div>
       ) : (
-        <button
+        <div
           className="start-button"
           title="Start recording"
-          onClick={startRecording}
+          tw="flex"
         >
-          <Buttons.Button buttonType="start-record" size="normal" />
-        </button>
+          <Buttons.Button buttonType="start-record" size="normal" onClick={startRecording}/>
+        </div>
       )}
 
-      <div tw="flex justify-center rounded-lg w-16 bg-gray-300 p-1">
+      <div tw="flex justify-center rounded-lg w-16 bg-gray-300 p-1 font-mono">
         {initRecording && <div className="recording-indicator"></div>}
         <div>{formatMinutes(recordingMinutes)}</div>
         <div>:</div>

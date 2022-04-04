@@ -12,7 +12,7 @@ const Index = () => {
   const [inputUrl, setinputUrl] = useState<string>("");
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { setUrl, formData, setFormData } = useStore();
+  const { setUrl, formData, setFormData, answers, resetAnswers } = useStore();
 
   const onSubmit = (data: any) => {
     setinputUrl(data.url);
@@ -58,6 +58,14 @@ const Index = () => {
         .catch(console.error);
     }
   }, [inputUrl, isValid]);
+
+  useEffect(() => {
+    resetAnswers(formData?.form_items?.length ? formData.form_items.length : 0);
+  }, [formData]);
+
+  useEffect(() => {
+    console.log('answers', answers);
+  }, [answers]);
 
   return (
     <div tw="flex justify-center items-center w-screen h-screen">

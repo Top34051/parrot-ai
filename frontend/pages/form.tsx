@@ -33,8 +33,8 @@ const Card = ({
   return (
     <div tw="flex w-full space-x-3 items-center">
       <LabelCircle label={label} />
-      <div tw="bg-gray-200 rounded-xl flex justify-between p-4 w-full">
-        <div tw="w-4/5">{content}</div>
+      <div tw="bg-gray-200 rounded-xl flex justify-between space-x-2 p-4 w-full">
+        <div tw="w-auto">{content}</div>
         {controller && <div tw="justify-self-end cursor-pointer">{controller}</div>}
       </div>
     </div>
@@ -121,6 +121,8 @@ const Form = () => {
   const questionLabel = `Q${questionIndex + 1}`;
   const answerLabel = `A${questionIndex + 1}`;
 
+  const itemType = formData.form_items[questionIndex].type;
+
   const questionText = formData.form_items[questionIndex].data.text;
   const questionAudio = formData.form_items[questionIndex].data.audio;
 
@@ -206,7 +208,7 @@ const Form = () => {
 
         <Card
           label={questionLabel}
-          content={<p tw='text-xl whitespace-pre-line'>{questionText}</p>}
+          content={<div tw='text-xl whitespace-pre-line h-60 overflow-y-auto'>{questionText}</div>}
           controller={
             <>
               <Buttons.Button buttonType="audio" size="normal" onClick={() => { 
@@ -217,7 +219,7 @@ const Form = () => {
           }
         />
 
-        <Card
+        {itemType !== 'title-and-description' && <Card
           label={answerLabel}
           content={
             <>
@@ -225,7 +227,7 @@ const Form = () => {
             </>
           }
           controller={
-            <div tw="flex space-x-3 align-top">
+            <div tw="flex space-x-3">
               {answerAudio !== "" && <Buttons.Button buttonType="audio" size="normal" onClick={() => { 
                 setAnswerSound(answerSound + 1); 
               }} />}
@@ -236,7 +238,7 @@ const Form = () => {
               />
             </div>
           }
-        />
+        />}
       </div>
 
       <div
