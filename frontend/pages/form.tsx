@@ -113,7 +113,7 @@ const Question = () => {
   const { recorderState, ...handlers }: UseRecorder = useRecorder();
   const { audio } = recorderState;
   const { clearAudio, deleteAudio, recordings } = useRecordingsList(audio);
-  const { url, formData, nq, setNq } = useStore();
+  const { url, formData, nq, setNq, setAns } = useStore();
   const [titleSCoutner, setTitleSCounter] = useState(0);
   const [descSCounter, setDescSCoutner] = useState(0);
   const [transcribed, setTranscribed] = useState("");
@@ -142,17 +142,20 @@ const Question = () => {
         .then((blob) => {
           let formData = new FormData();
           formData.append("audio_file", blob);
-          fetch(`${config.apiUrl}/transcribe`, {
+          fetch(config.apiUrl + "/transcribe", {
             method: "POST",
             cache: "no-cache",
             body: formData,
-            mode: "cors",
+            mode: "no-cors",
           })
-            .then((resp) => {
-              if (resp.status === 200) {
-                console.log(resp);
-              } else {
-                console.error("Error:", resp);
+            .then((res) => res.json())
+            .then((text) => {
+              if (text) {
+                setTranscribed(text);
+                setAns(nq, {
+                  audio: blob,
+                  text,
+                });
               }
             })
             .catch((err) => {
@@ -226,11 +229,8 @@ const Question = () => {
           text={`A${nq + 1}`}
           content={
             <>
-              <RecordingsList
-                deleteAudio={deleteAudio}
-                recordings={recordings}
-              />
-              {transcribed != "" && <p>{transcribed}</p>}
+              {/* <RecordingsList recordings={audio} /> */}
+              {transcribed == "" ? <p>No audio</p> : <p>{transcribed}</p>}
             </>
           }
         />

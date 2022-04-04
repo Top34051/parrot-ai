@@ -22,7 +22,7 @@ export interface iFormData {
 }
 
 export interface Answer {
-  audio: string;
+  audio: Blob;
   text: string;
 }
 

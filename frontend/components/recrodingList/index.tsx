@@ -6,15 +6,10 @@ import { useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
-export default function RecordingsList({
-  recordings,
-}: {
-  recordings: any;
-}) {
-
+export default function RecordingsList({ recordings }: { recordings: any }) {
   const canvasRef = useRef(null);
   const audioRef = useRef(null);
-  const recording = recordings.length > 0 ? recordings[0] : null;
+  const recording = recordings ? recordings : null;
 
   useEffect(() => {
     if (audioRef.current && canvasRef.current) {
@@ -26,7 +21,7 @@ export default function RecordingsList({
   return (
     <div tw="flex flex-col space-y-2">
       {recording && <h1>Your recordings</h1>}
-      {recording && <audio controls src={recording.audio} ref={audioRef} />}
+      {recording && <audio controls src={recording} ref={audioRef} />}
       {recording && <canvas ref={canvasRef}></canvas>}
       {!recording && <div tw="">You don't have records</div>}
     </div>
