@@ -7,16 +7,18 @@ import { HiArrowSmRight, HiArrowSmLeft } from "react-icons/hi";
 
 function Button({
     buttonType,
-    size
+    size,  
+    onClick
 }: {
     buttonType: string,
-    size: string
+    size: string,
+    onClick?: () => void,
 }) : JSX.Element {
 
     if (buttonType === 'audio') {
         return (
-            <button>
-                {size === 'normal' && <FcSpeaker size={20} tw='text-white rounded-3xl border border-gray-300 h-12 w-24'/>}
+            <button onClick={onClick}>
+                {size === 'normal' && <FcSpeaker size={20} tw='text-white rounded-full border border-gray-400 h-16 w-16 p-2'/>}
                 {size === 'mini' && <FcSpeaker size={20} tw='text-white rounded-3xl border border-gray-300 h-9 w-14'/>}
             </button>
         );
@@ -24,7 +26,7 @@ function Button({
 
     if (buttonType === 'start-record') {
         return (
-            <button>
+            <button onClick={onClick}>
                 {size === 'normal' && <BsRecordFill size={10} color='#de5246' tw='text-white rounded-full bg-gray-300 h-16 w-16 p-2'/>}
                 {size === 'mini' && <BsRecordFill size={10} color='#de5246' tw='text-white rounded-3xl bg-gray-300 h-9 w-14 p-1'/>}
             </button>
@@ -33,7 +35,7 @@ function Button({
 
     if (buttonType === 'stop-record') {
         return (
-            <button>
+            <button onClick={onClick}>
                 {size === 'normal' && <BsStopFill size={10} color='#de5246' tw='text-white rounded-full bg-gray-300 h-16 w-16 p-2'/>}
                 {size === 'mini' && <BsStopFill size={10} color='#de5246' tw='text-white rounded-3xl bg-gray-300 h-9 w-14 p-1'/>}
             </button>
@@ -42,7 +44,7 @@ function Button({
 
     if (buttonType === 'next') {
         return (
-            <button>
+            <button onClick={onClick}>
                 {size === 'normal' && <HiArrowSmRight size={20} tw='text-white rounded-3xl bg-green-500 h-12 w-24'/>}
                 {size === 'mini' && <HiArrowSmRight size={20} tw='text-white rounded-3xl bg-green-500 h-9 w-14'/>}
             </button>
@@ -51,7 +53,7 @@ function Button({
 
     if (buttonType === 'back') {
         return (
-            <button>
+            <button onClick={onClick}>
                 {size === 'normal' && <HiArrowSmLeft size={20} tw='text-white rounded-3xl bg-gray-400 h-12 w-24'/>}
                 {size === 'mini' && <HiArrowSmLeft size={20} tw='text-white rounded-3xl bg-gray-400 h-9 w-14'/>}
             </button>

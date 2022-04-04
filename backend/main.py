@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 import requests
 import io, os
@@ -38,20 +39,39 @@ def is_valid_url(url: str):
     return response.status_code == 200
 
 
-@app.post('/transcribe')
+@app.post('/convert_audio')
+def convert_audio(audio_file: bytes = File(...)):
+
+    print(audio_file)
+
+    os.makedirs('tmp', exist_ok=True)
+    
+    with open('tmp/audio.ogg', 'wb') as f:
+        f.write(audio_file)
+
+    song = AudioSegment.from_file('tmp/audio.ogg')
+    song.export('tmp/audio.mp3', format="mp3")
+
+    with io.open('tmp/audio.mp3', 'rb') as f:
+        content = f.read()
+
+    return content.decode('iso-8859-1')
+
+
+@app.post('/get_transcript')
 def transcribe(audio_file: bytes = File(...)):
 
     os.makedirs('tmp', exist_ok=True)
     
-    # convert audio file (ogg) to mp3
     with open('tmp/audio.ogg', 'wb') as f:
         f.write(audio_file)
+
     song = AudioSegment.from_file('tmp/audio.ogg')
     song.export('tmp/audio.mp3', format="mp3")
 
-    # transcribe audio content
     with io.open('tmp/audio.mp3', 'rb') as f:
         content = f.read()
+
     transcript = speech_to_text.transcribe(content)
     return transcript
    
@@ -59,25 +79,39 @@ def transcribe(audio_file: bytes = File(...)):
 @app.post('/forms')
 def forms(url: str):
     
-    form = extract_form(url)
+    raw_form = extract_form(url)
 
     print('Generating audio for the form')
 
-    for item in tqdm(form['form_items']):
+    form = {
+        'title': raw_form['title'],
+        'description': raw_form['description'],
+        'form_items': []
+    }
+
+    for item in tqdm(raw_form['form_items']):
+
         text = item['data']['text']
 
-        if 'options' in text:
-            audio_content = {
-                'title': text_to_speech.synthesize(text['title']),
-                'description': text_to_speech.synthesize(text['description']),
-                'options': [text_to_speech.synthesize(option) for option in text['options']]
-            }
-        else:
-            audio_content = {
-                'title': text_to_speech.synthesize(text['title']),
-                'description': text_to_speech.synthesize(text['description'])
-            }
-        
-        item['data']['audio_content'] = audio_content
+        form_text = text['title'] + '\n' + text['description']
+        for option in text['options']:
+            form_text += '\n' + option
+
+        form_audio = text['title'] + '\n' + text['description']
+        for idx, option in enumerate(text['options']):
+            form_audio += '\n' + 'Option {}: '.format(idx + 1) + option
+        form_audio = form_audio.replace('*', '')
+        form_audio = text_to_speech.synthesize(form_audio)
+
+        form['form_items'].append({
+            'type': item['type'],
+            'data': {
+                'text': form_text,
+                'audio': form_audio
+            },
+            'required': item['required']
+        })
+
+    print(form)
 
     return form
