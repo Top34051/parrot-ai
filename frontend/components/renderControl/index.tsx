@@ -7,28 +7,26 @@ export default function RecorderControls({
   recorderState,
   handlers,
 }: RecorderControlsProps) {
-
   const { recordingMinutes, recordingSeconds, initRecording } = recorderState;
   const { startRecording, saveRecording } = handlers;
-  
+
   return (
     <div tw="flex justify-center items-center space-x-3">
-  
       {initRecording ? (
-        <div
-          className="start-button"
-          title="Save recording"
-          tw="flex"
-        >
-          <Buttons.Button buttonType="stop-record" size="normal" onClick={saveRecording}/>
+        <div className="start-button" title="Save recording" tw="flex">
+          <Buttons.Button
+            buttonType="stop-record"
+            size="normal"
+            onClick={saveRecording}
+          />
         </div>
       ) : (
-        <div
-          className="start-button"
-          title="Start recording"
-          tw="flex"
-        >
-          <Buttons.Button buttonType="start-record" size="normal" onClick={startRecording}/>
+        <div className="start-button" title="Start recording" tw="flex">
+          <Buttons.Button
+            buttonType="start-record"
+            size="normal"
+            onClick={startRecording}
+          />
         </div>
       )}
 
@@ -38,7 +36,6 @@ export default function RecorderControls({
         <div>:</div>
         <div>{formatSeconds(recordingSeconds)}</div>
       </div>
-      
     </div>
   );
 }

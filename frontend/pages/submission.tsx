@@ -6,9 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Buttons from "../components/buttons";
 
-
 const Submission = () => {
-
   const router = useRouter();
 
   const { url, formData, answers, resetAnswers, setQuestionIndex } = useStore();
@@ -16,9 +14,12 @@ const Submission = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
+    console.log("answers", answers);
+    console.log("formData", formData);
     let invalid = false;
     for (let i = 0; i < answers.length; i++) {
-      if (formData?.form_items[i].required && answers[i].text === "") invalid = true;
+      if (formData?.form_items[i].required && answers[i].text === "")
+        invalid = true;
     }
     setCanSubmit(!invalid);
   }, [answers]);
@@ -46,7 +47,6 @@ const Submission = () => {
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
-      
       <section tw="absolute top-12 w-full">
         <div tw="flex justify-between px-12">
           <div>
@@ -64,35 +64,43 @@ const Submission = () => {
         </div>
       </section>
 
-      {!isSubmitted && <div tw='flex flex-col space-y-14'>
-        <p tw="text-4xl font-bold"> Please answer all the required questions.</p>
-      </div>}
+      {!isSubmitted && (
+        <div tw="flex flex-col space-y-14">
+          <p tw="text-4xl font-bold">
+            {" "}
+            Please answer all the required questions.
+          </p>
+        </div>
+      )}
 
-      {isSubmitted && <div tw='flex flex-col space-y-14'>
-        <p tw="text-6xl font-bold"> Your form has been submitted!</p>
-        <div tw="flex justify-center">
-          <Link href="/confirmation">
-            <button
-              tw="
+      {isSubmitted && (
+        <div tw="flex flex-col space-y-14">
+          <p tw="text-6xl font-bold"> Your form has been submitted!</p>
+          <div tw="flex justify-center">
+            <Link href="/confirmation">
+              <button
+                tw="
               rounded-2xl text-white text-2xl font-bold 
               py-3 px-16 
               bg-green-500 hover:bg-green-600 active:bg-green-700
               focus:outline-none focus:ring focus:ring-green-400 
               "
-            >
-              Submit another form
-            </button>
-          </Link>
+              >
+                Submit another form
+              </button>
+            </Link>
+          </div>
         </div>
-      </div>}
+      )}
 
       <div
         tw="absolute bottom-12 left-12 cursor-pointer"
-        onClick={() => { router.push("/form"); }}
+        onClick={() => {
+          router.push("/form");
+        }}
       >
         <Buttons.Button buttonType="back" size="normal" />
       </div>
-
     </div>
   );
 };

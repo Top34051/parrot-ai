@@ -3,7 +3,6 @@ import useStore from "../store";
 import Link from "next/link";
 
 const Confirmation = () => {
-
   const { formData } = useStore();
 
   return (

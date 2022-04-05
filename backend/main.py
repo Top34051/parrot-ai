@@ -58,8 +58,9 @@ def forms(url: str):
         'description': raw_form['description'],
         'form_items': []
     }
+    print(raw_form)
     for item in tqdm(raw_form['form_items']):
-        
+
         text = item['data']['text']
 
         form_text = text['title'] + '\n' + text['description']
@@ -80,7 +81,7 @@ def forms(url: str):
             },
             'required': item['required']
         })
-
+    print(form)
     return form
 
 @app.post('/submit')

@@ -64,7 +64,7 @@ const Index = () => {
   }, [formData]);
 
   useEffect(() => {
-    console.log('answers', answers);
+    console.log("Update answers", answers);
   }, [answers]);
 
   return (

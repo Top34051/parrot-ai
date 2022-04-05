@@ -25,7 +25,7 @@ export interface storeType {
   setUrl: (url: string) => void;
   formData: iFormData | null;
   setFormData: (form: iFormData) => void;
-  questionIndex: number; 
+  questionIndex: number;
   setQuestionIndex: (questionIndex: number) => void;
   answers: Answer[];
   setAnswer: (questionIndex: number, answer: Answer) => void;
@@ -57,8 +57,8 @@ const useStore = create<storeType>((set) => ({
       ...state,
       answers: new Array(length).fill({
         audio: null,
-        text: ''
-      })
+        text: "",
+      }),
     })),
   setAnswer: (questionIndex, answer) =>
     set((state) => ({
@@ -66,9 +66,9 @@ const useStore = create<storeType>((set) => ({
       answers: [
         ...state.answers.slice(0, questionIndex),
         answer,
-        ...state.answers.slice(questionIndex+1),
+        ...state.answers.slice(questionIndex + 1),
       ],
-    }))
+    })),
 }));
 
 export default useStore;
