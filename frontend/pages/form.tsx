@@ -81,7 +81,9 @@ const Sound = ({
   return null;
 };
 
-const Bouncing = () => <div tw="bg-gray-400 p-2 w-36 h-3 rounded-full"></div>;
+const Bouncing = () => (
+  <div tw="animate-pulse bg-gray-400 p-2 w-36 h-3 rounded-full"></div>
+);
 
 const Form = () => {
   const router = useRouter();
