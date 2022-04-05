@@ -5,6 +5,7 @@ import config from "../config/index";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Buttons from "../components/buttons";
+import Head from "next/head";
 
 const Submission = () => {
   const router = useRouter();
@@ -47,6 +48,9 @@ const Submission = () => {
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
+      <Head>
+        <title>Parrot.ai</title>
+      </Head>
       <section tw="absolute top-12 w-full">
         <div tw="flex justify-between px-12">
           <div>

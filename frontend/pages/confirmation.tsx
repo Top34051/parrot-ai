@@ -1,12 +1,16 @@
 import tw from "twin.macro";
 import useStore from "../store";
 import Link from "next/link";
+import Head from "next/head";
 
 const Confirmation = () => {
   const { formData } = useStore();
 
   return (
     <div tw="h-screen w-screen flex items-center justify-center">
+      <Head>
+        <title>Parrot.ai</title>
+      </Head>
       <section tw="absolute top-12 right-12">
         <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
       </section>

@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import iconv from "iconv-lite";
 import Buttons from "../components/buttons";
 const config = require("../config");
+import Head from "next/head";
 
 const LabelCircle = ({ label }: { label: string }): JSX.Element => {
   return (
@@ -199,6 +200,9 @@ const Form = () => {
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
+      <Head>
+        <title>Parrot.ai</title>
+      </Head>
       <section tw="absolute top-12 w-full">
         <div tw="flex justify-between px-12">
           <div>
