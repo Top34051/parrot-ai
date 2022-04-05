@@ -197,7 +197,7 @@ const Form = () => {
         <Card
           label={questionLabel}
           content={
-            <div tw="text-xl whitespace-pre-line h-60 overflow-y-auto">
+            <div tw="text-xl whitespace-pre-line max-h-60 overflow-y-auto">
               {questionText}
             </div>
           }
