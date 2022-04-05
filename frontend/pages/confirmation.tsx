@@ -9,7 +9,7 @@ const Confirmation = () => {
   return (
     <div tw="h-screen w-screen flex items-center justify-center">
       <Head>
-        <title>Parrot.ai</title>
+        <title>Parrot.AI</title>
       </Head>
       <section tw="absolute top-12 right-12">
         <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>

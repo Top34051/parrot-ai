@@ -157,12 +157,9 @@ const Form = () => {
                       .then((content) => {
                         setAnswerAudio(content);
                       })
-                      .catch((err) => {
-                        console.error(err);
+                      .then(() => {
+                        setAnswerText(text);
                       });
-                  })
-                  .then(() => {
-                    setAnswerText(text);
                   });
               }
             });
@@ -201,7 +198,7 @@ const Form = () => {
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
       <Head>
-        <title>Parrot.ai</title>
+        <title>Parrot.AI</title>
       </Head>
       <section tw="absolute top-12 w-full">
         <div tw="flex justify-between px-12">

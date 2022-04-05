@@ -6,7 +6,7 @@ const Instruction = () => {
   return (
     <div tw="h-screen w-screen px-32 py-20 space-y-10">
       <Head>
-        <title>Parrot.ai</title>
+        <title>Parrot.AI</title>
       </Head>
       <section tw="absolute top-12 right-12">
         <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>

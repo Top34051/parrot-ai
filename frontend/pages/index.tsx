@@ -67,7 +67,7 @@ const Index = () => {
   return (
     <div tw="flex justify-center items-center w-screen h-screen">
       <Head>
-        <title>Parrot.ai</title>
+        <title>Parrot.AI</title>
       </Head>
       <section tw="absolute top-12 right-12">
         <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
