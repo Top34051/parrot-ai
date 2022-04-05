@@ -43,7 +43,7 @@ def is_valid_url(url: str):
 
 
 @app.post('/save_audio')
-def convert_audio(audio_file: bytes = File(...)):
+def save_audio(audio_file: bytes = File(...)):
     return save_audio_file(audio_file)
 
 
