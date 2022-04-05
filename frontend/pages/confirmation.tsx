@@ -13,9 +13,7 @@ const Confirmation = () => {
 
       <section tw="space-y-12 justify-center">
         <div tw="space-y-3 text-center">
-          <h1 tw="text-purple-800 text-7xl font-bold tracking-tight">
-            {formData?.title}
-          </h1>
+          <h1 tw="text-7xl font-bold tracking-tight">{formData?.title}</h1>
           <p tw="text-lg font-semibold">{formData?.description}</p>
         </div>
         <div tw="flex justify-center">
@@ -24,11 +22,11 @@ const Confirmation = () => {
               tw="
               rounded-2xl text-white text-2xl font-bold 
               py-3 px-16 
-              bg-green-500 hover:bg-green-600 active:bg-green-700
-              focus:outline-none focus:ring focus:ring-green-400 
+              bg-purple-500 hover:bg-purple-600 active:bg-purple-700
+              focus:outline-none focus:ring focus:ring-purple-400 
               "
             >
-              Confirm
+              Click here to proceed
             </button>
           </Link>
         </div>

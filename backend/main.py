@@ -82,6 +82,7 @@ def forms(url: str):
         })
     return form
 
+
 @app.post('/submit')
 async def submit(request: Request):
     form_data = await request.form()

@@ -80,8 +80,8 @@ const Submission = () => {
                 tw="
               rounded-2xl text-white text-2xl font-bold 
               py-3 px-16 
-              bg-green-500 hover:bg-green-600 active:bg-green-700
-              focus:outline-none focus:ring focus:ring-green-400 
+              bg-purple-500 hover:bg-purple-600 active:bg-purple-700
+              focus:outline-none focus:ring focus:ring-purple-400 
               "
               >
                 Submit another form
