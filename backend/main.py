@@ -33,11 +33,8 @@ speech_to_text = SpeechToText()
 
 @app.get('/is_valid_url')
 def is_valid_url(url: str):
-    try:
-        response = requests.get(url)
-        return response.status_code == 200
-    except:
-        return False
+    response = requests.get(url)
+    return response.status_code == 200
 
 
 @app.post('/convert_audio')
