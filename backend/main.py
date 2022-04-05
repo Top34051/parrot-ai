@@ -33,8 +33,11 @@ speech_to_text = SpeechToText()
 
 @app.get('/is_valid_url')
 def is_valid_url(url: str):
-    response = requests.get(url)
-    return response.status_code == 200
+    try:
+        response = requests.get(url)
+        return response.status_code == 200
+    except:
+        return False
 
 
 @app.post('/convert_audio')
@@ -58,7 +61,6 @@ def forms(url: str):
         'description': raw_form['description'],
         'form_items': []
     }
-    print(raw_form)
     for item in tqdm(raw_form['form_items']):
 
         text = item['data']['text']
@@ -81,7 +83,6 @@ def forms(url: str):
             },
             'required': item['required']
         })
-    print(form)
     return form
 
 @app.post('/submit')

@@ -32,10 +32,9 @@ def extract_form(url: str):
         item_content = str(item)
         item_soup = BeautifulSoup(str(item_content), "html.parser")
 
-        required = item_soup.find('div', {'role': 'heading'}).find_next('span', {'aria-label': 'Required question'})
-        required = required is not None
-
         title = item_soup.find('div', {'role': 'heading'}).text
+
+        required = '*' in title
 
         description = item_soup.find('div', {'role': 'heading'}).find_next('div').contents
         description_res = []
