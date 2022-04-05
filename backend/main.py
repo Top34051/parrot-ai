@@ -10,7 +10,12 @@ from speech_to_text import SpeechToText
 from convert_audio import convert_audio_file
 
 
-app = FastAPI()
+app = FastAPI(
+    title="Parrot.AI",
+    version="0.1.0",
+)
+
+
 origins = [
     "http://localhost",
     "http://localhost:8080",
