@@ -65,10 +65,6 @@ const Index = () => {
 
   return (
     <div tw="flex justify-center items-center w-screen h-screen">
-      <section tw="absolute top-12 right-12">
-        <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
-      </section>
-
       <section>
         <Form
           onSubmit={onSubmit}
