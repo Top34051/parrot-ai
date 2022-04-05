@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useStore from "../store";
 import { useRouter } from "next/router";
 import { CgSpinner } from "react-icons/cg";
+import Head from "next/head";
 
 const config = require("../config");
 
@@ -61,6 +62,9 @@ const Index = () => {
 
   return (
     <div tw="flex justify-center items-center w-screen h-screen">
+      <Head>
+        <title>Parrot.ai</title>
+      </Head>
       <section tw="absolute top-12 right-12">
         <h1 tw="text-xl font-semibold tracking-tight">Parrot.AI</h1>
       </section>

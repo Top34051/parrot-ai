@@ -245,10 +245,7 @@ const Question = () => {
           }
           text={`A${nq + 1}`}
           content={
-            <>
-              {/* <RecordingsList recordings={audio} /> */}
-              {transcribed == "" ? <Bouncing /> : <p>{transcribed}</p>}
-            </>
+            <>{transcribed == "" ? <Bouncing /> : <p>{transcribed}</p>}</>
           }
         />
       </div>
