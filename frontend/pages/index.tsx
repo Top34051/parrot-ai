@@ -13,7 +13,7 @@ const Index = () => {
   const [inputUrl, setinputUrl] = useState<string>("");
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { setUrl, formData, setFormData } = useStore();
+  const { setUrl, formData, setFormData, answers, resetAnswers } = useStore();
 
   const onSubmit = (data: any) => {
     setinputUrl(data.url);
@@ -60,6 +60,10 @@ const Index = () => {
     }
   }, [inputUrl, isValid]);
 
+  useEffect(() => {
+    resetAnswers(formData?.form_items?.length ? formData.form_items.length : 0);
+  }, [formData]);
+
   return (
     <div tw="flex justify-center items-center w-screen h-screen">
       <Head>
@@ -74,9 +78,12 @@ const Index = () => {
           onSubmit={onSubmit}
           render={({ handleSubmit }) => (
             <form onSubmit={handleSubmit} tw="space-y-20">
-              <h2 tw="text-center text-8xl tracking-tight font-bold">
-                Parrot.AI 🦜
-              </h2>
+              <div tw="flex flex-col space-y-5 justify-center items-center">
+                <img src={"logo.png"} tw="h-48 object-center" />
+                <h2 tw="text-center text-8xl tracking-tight font-bold">
+                  Parrot.AI
+                </h2>
+              </div>
               <div tw="space-x-3 flex justify-center">
                 <Field
                   name="url"

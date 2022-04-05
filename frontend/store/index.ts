@@ -2,17 +2,11 @@ import create from "zustand";
 
 interface iformItems {
   data: {
-    audio_content: {
-      title: string;
-      description: string;
-    };
-    text: {
-      title: string;
-      description: string;
-    };
+    audio: string;
+    text: string;
   };
   required: boolean;
-  type: "short-answer";
+  type: string;
 }
 
 export interface iFormData {
@@ -22,7 +16,7 @@ export interface iFormData {
 }
 
 export interface Answer {
-  audio: Blob;
+  audio: string;
   text: string;
 }
 
@@ -31,10 +25,11 @@ export interface storeType {
   setUrl: (url: string) => void;
   formData: iFormData | null;
   setFormData: (form: iFormData) => void;
-  nq: number; //current number of question
-  setNq: (nq: number) => void;
+  questionIndex: number;
+  setQuestionIndex: (questionIndex: number) => void;
   answers: Answer[];
-  setAns: (nq: number, answer: Answer) => void;
+  setAnswer: (questionIndex: number, answer: Answer) => void;
+  resetAnswers: (length: number) => void;
 }
 
 const useStore = create<storeType>((set) => ({
@@ -50,20 +45,28 @@ const useStore = create<storeType>((set) => ({
       ...state,
       formData: form,
     })),
-  nq: 0,
-  setNq: (nq) =>
+  questionIndex: 0,
+  setQuestionIndex: (questionIndex) =>
     set((state) => ({
       ...state,
-      nq,
+      questionIndex,
     })),
   answers: [],
-  setAns: (nq, answer) =>
+  resetAnswers: (length) =>
+    set((state) => ({
+      ...state,
+      answers: new Array(length).fill({
+        audio: null,
+        text: "",
+      }),
+    })),
+  setAnswer: (questionIndex, answer) =>
     set((state) => ({
       ...state,
       answers: [
-        ...state.answers.slice(0, nq),
+        ...state.answers.slice(0, questionIndex),
         answer,
-        ...state.answers.slice(nq),
+        ...state.answers.slice(questionIndex + 1),
       ],
     })),
 }));

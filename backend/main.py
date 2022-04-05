@@ -1,17 +1,21 @@
-from fastapi import FastAPI, File
+from fastapi import FastAPI, File, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 import requests
-import io, os
-from pydub import AudioSegment
 from tqdm import tqdm
 
 from form_scraper import extract_form
 from text_to_speech import TextToSpeech
 from speech_to_text import SpeechToText
+from convert_audio import convert_audio_file
 
 
-app = FastAPI()
+app = FastAPI(
+    title="Parrot.AI",
+    version="0.1.0",
+)
+
+
 origins = [
     "http://localhost",
     "http://localhost:8080",
@@ -38,46 +42,54 @@ def is_valid_url(url: str):
     return response.status_code == 200
 
 
-@app.post('/transcribe')
+@app.post('/convert_audio')
+def convert_audio(audio_file: bytes = File(...)):
+    content = convert_audio_file(audio_file)
+    return content.decode('iso-8859-1')
+
+
+@app.post('/get_transcript')
 def transcribe(audio_file: bytes = File(...)):
-
-    os.makedirs('tmp', exist_ok=True)
-    
-    # convert audio file (ogg) to mp3
-    with open('tmp/audio.ogg', 'wb') as f:
-        f.write(audio_file)
-    song = AudioSegment.from_file('tmp/audio.ogg')
-    song.export('tmp/audio.mp3', format="mp3")
-
-    # transcribe audio content
-    with io.open('tmp/audio.mp3', 'rb') as f:
-        content = f.read()
-    transcript = speech_to_text.transcribe(content)
-    return transcript
+    content = convert_audio_file(audio_file)
+    return speech_to_text.transcribe(content)
    
 
 @app.post('/forms')
 def forms(url: str):
-    
-    form = extract_form(url)
-
+    raw_form = extract_form(url)
     print('Generating audio for the form')
+    form = {
+        'title': raw_form['title'],
+        'description': raw_form['description'],
+        'form_items': []
+    }
+    for item in tqdm(raw_form['form_items']):
 
-    for item in tqdm(form['form_items']):
         text = item['data']['text']
 
-        if 'options' in text:
-            audio_content = {
-                'title': text_to_speech.synthesize(text['title']),
-                'description': text_to_speech.synthesize(text['description']),
-                'options': [text_to_speech.synthesize(option) for option in text['options']]
-            }
-        else:
-            audio_content = {
-                'title': text_to_speech.synthesize(text['title']),
-                'description': text_to_speech.synthesize(text['description'])
-            }
-        
-        item['data']['audio_content'] = audio_content
+        form_text = text['title'] + '\n' + text['description']
+        for option in text['options']:
+            form_text += '\n' + '● ' + option
 
+        form_audio = text['title'] + '.\n' + text['description']
+        for idx, option in enumerate(text['options']):
+            form_audio += '\n' + 'Option {}: '.format(idx + 1) + option + '.'
+        form_audio = form_audio.replace('*', '')
+        form_audio = text_to_speech.synthesize(form_audio)
+
+        form['form_items'].append({
+            'type': item['type'],
+            'data': {
+                'text': form_text,
+                'audio': form_audio
+            },
+            'required': item['required']
+        })
     return form
+
+
+@app.post('/submit')
+async def submit(request: Request):
+    form_data = await request.form()
+    print(form_data)
+    return ""    

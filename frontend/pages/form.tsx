@@ -5,84 +5,61 @@ import useRecorder from "../hooks/use-recorder";
 import { UseRecorder } from "../types/recorder";
 import useRecordingsList from "../hooks/use-recordings-list";
 import RecorderControls from "../components/renderControl";
-import RecordingsList from "../components/recrodingList";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleArrowRight,
-  faVolumeHigh,
-  faCircleArrowLeft,
-} from "@fortawesome/free-solid-svg-icons";
 import useStore from "../store";
 import { useRouter } from "next/router";
 import iconv from "iconv-lite";
-import { HiArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
-import { BsRecordFill, BsStopFill } from "react-icons/bs";
-import { FcSpeaker } from "react-icons/fc";
 import Buttons from "../components/buttons";
 const config = require("../config");
 
-const CircleBox = ({ text }: { text: string }) => {
+const LabelCircle = ({ label }: { label: string }): JSX.Element => {
   return (
-    <div tw="rounded-full w-14 h-14 bg-purple-600 font-semibold text-lg text-white flex justify-center items-center">
-      <div>{text}</div>
-    </div>
-  );
-};
-
-const QuestionCom = ({
-  text,
-  Icon,
-  click,
-}: {
-  text: string;
-  Icon: JSX.Element;
-  click: () => void;
-}) => {
-  return (
-    <div>
-      <div tw="flex">
-        <div>{text}</div>
-        <div tw="px-4 justify-self-end cursor-pointer" onClick={click}>
-          {Icon}
-        </div>
-      </div>
+    <div tw="rounded-full w-16 h-16 bg-purple-600 font-semibold text-lg text-white flex justify-center items-center">
+      <p>{label}</p>
     </div>
   );
 };
 
 const Card = ({
-  text,
+  label,
   content,
-  Icon,
+  controller,
 }: {
-  text: string;
+  label: string;
   content: JSX.Element;
-  Icon: JSX.Element | null;
+  controller: JSX.Element | null;
 }) => {
   return (
     <div tw="flex w-full space-x-3 items-center">
-      <div>
-        <CircleBox text={text} />
-      </div>
-      <div tw="bg-gray-200 rounded-xl flex justify-between p-4 w-full">
-        <div tw="w-4/5">{content}</div>
-        {Icon && <div tw="px-4 justify-self-end cursor-pointer">{Icon}</div>}
+      <LabelCircle label={label} />
+      <div tw="bg-gray-200 rounded-xl flex justify-between space-x-2 p-4 w-full">
+        <div tw="w-auto">{content}</div>
+        {controller && (
+          <div tw="justify-self-end cursor-pointer">{controller}</div>
+        )}
       </div>
     </div>
   );
 };
 
-const Sound = ({ text, playCount }: { text: string; playCount: number }) => {
+const Sound = ({
+  buffer,
+  playCount,
+}: {
+  buffer: string;
+  playCount: number;
+}) => {
   let audioCtx: any;
   let source: any;
-  let audioBuffer;
+
   useEffect(() => {
+    console.log("Sound playCount increase");
+
     //@ts-expect-error
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     source = audioCtx.createBufferSource();
-    audioBuffer = text;
+
     audioCtx.decodeAudioData(
-      new Uint8Array(iconv.encode(audioBuffer, "iso-8859-1")).buffer,
+      new Uint8Array(iconv.encode(buffer, "iso-8859-1")).buffer,
       function (buffer: any) {
         source.buffer = buffer;
         source.connect(audioCtx.destination);
@@ -91,101 +68,109 @@ const Sound = ({ text, playCount }: { text: string; playCount: number }) => {
         console.log("Error with decoding audio data" + JSON.stringify(e));
       }
     );
-    audioCtx.addEventListener(
-      "ended",
-      () => {
-        // setIsPlaying(false);
-      },
-      false
-    );
+
+    audioCtx.addEventListener("ended", () => {}, false);
 
     audioCtx.onstatechange = function () {
       console.log(audioCtx.state);
     };
-    if (playCount != 0) {
-      source.start(0);
-    }
+
+    if (playCount != 0) source.start(0);
   }, [playCount]);
+
   return null;
 };
 
-const Bouncing = () => (
-  <div tw="flex space-x-2 p-2">
-    <div
-      tw="bg-blue-600 p-2  w-4 h-4 rounded-full animate-bounce"
-      style={{ animationDelay: "0.1s" }}
-    ></div>
-    <div
-      tw="bg-green-600 p-2 w-4 h-4 rounded-full animate-bounce"
-      style={{ animationDelay: "0.2s" }}
-    ></div>
-    <div
-      tw="bg-red-600 p-2  w-4 h-4 rounded-full animate-bounce"
-      style={{ animationDelay: "0.3s" }}
-    ></div>
-  </div>
-);
+const Bouncing = () => <div tw="bg-gray-400 p-2 w-36 h-3 rounded-full"></div>;
 
-const Question = () => {
-  const { recorderState, ...handlers }: UseRecorder = useRecorder();
-  const { audio } = recorderState;
-  const { clearAudio, deleteAudio, recordings } = useRecordingsList(audio);
-  const { url, formData, nq, setNq, setAns } = useStore();
-  const [titleSCoutner, setTitleSCounter] = useState(0);
-  const [descSCounter, setDescSCoutner] = useState(0);
-  const [transcribed, setTranscribed] = useState("");
+const Form = () => {
   const router = useRouter();
 
-  if (!formData || nq < 0) {
+  const { recorderState, ...handlers }: UseRecorder = useRecorder();
+  const { audio } = recorderState;
+  const { clearAudio } = useRecordingsList(audio);
+
+  const { url, formData, questionIndex, setQuestionIndex, answers, setAnswer } =
+    useStore();
+
+  const [questionSound, setQuestionSound] = useState(0);
+
+  const [answerText, setAnswerText] = useState("");
+  const [answerAudio, setAnswerAudio] = useState("");
+  const [answerSound, setAnswerSound] = useState(0);
+
+  if (!formData || questionIndex < 0) {
     router.push("/");
     return null;
   }
 
-  if (nq >= formData.form_items.length) {
-    router.push("/conclusion");
+  if (questionIndex >= formData.form_items.length) {
+    router.push("/submission");
     return null;
   }
 
-  const questionText = `Q${nq + 1}`;
-  const questionTitle = formData.form_items[nq].data.text.title;
-  const questionDesc = formData.form_items[nq].data.text.description;
-  const titleAudio = formData.form_items[nq].data.audio_content.title;
-  const descAudio = formData.form_items[nq].data.audio_content.description;
+  const questionLabel = `Q${questionIndex + 1}`;
+  const answerLabel = `A${questionIndex + 1}`;
+
+  const itemType = formData.form_items[questionIndex].type;
+
+  const questionText = formData.form_items[questionIndex].data.text;
+  const questionAudio = formData.form_items[questionIndex].data.audio;
 
   useEffect(() => {
     if (audio) {
       fetch(audio)
         .then((r) => r.blob())
         .then((blob) => {
-          let formData = new FormData();
+          const formData = new FormData();
           formData.append("audio_file", blob);
-          fetch(config.apiUrl + "/transcribe", {
+
+          fetch(config.apiUrl + "/convert_audio", {
             method: "POST",
             cache: "no-cache",
             body: formData,
-            mode: "no-cors",
+            mode: "cors",
           })
             .then((res) => res.json())
-            .then((text) => {
-              if (text) {
-                setTranscribed(text);
-                setAns(nq, {
-                  audio: blob,
-                  text,
-                });
-              }
+            .then((content) => {
+              setAnswerAudio(content);
             })
-            .catch((err) => {
-              console.error(err);
+            .then(() => {
+              fetch(config.apiUrl + "/get_transcript", {
+                method: "POST",
+                cache: "no-cache",
+                body: formData,
+                mode: "cors",
+              })
+                .then((res) => res.json())
+                .then((text) => {
+                  if (text) setAnswerText(text);
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
             });
-        })
-        .catch(console.log);
+        });
     }
   }, [audio]);
 
   useEffect(() => {
+    if (answers[questionIndex] && answers[questionIndex].text)
+      setAnswerText(answers[questionIndex].text);
+    else setAnswerText("");
+    if (answers[questionIndex] && answers[questionIndex].audio)
+      setAnswerAudio(answers[questionIndex].audio);
+    else setAnswerAudio("");
     clearAudio();
-  }, [nq]);
+  }, [questionIndex]);
+
+  useEffect(() => {
+    console.log("Update answer for question", questionIndex);
+    setAnswer(questionIndex, {
+      audio: answerAudio,
+      text: answerText,
+    });
+  }, [answerText]);
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
@@ -208,56 +193,68 @@ const Question = () => {
 
       <div tw="flex flex-col justify-center space-y-3 w-4/6">
         <Card
-          Icon={null}
-          text={questionText}
+          label={questionLabel}
           content={
-            <div>
-              <QuestionCom
-                Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
-                click={() => {
-                  setTitleSCounter(titleSCoutner + 1);
-                }}
-                text={questionTitle}
-              />
-              <Sound text={titleAudio} playCount={titleSCoutner} />
-              {questionDesc && (
-                <>
-                  <QuestionCom
-                    Icon={<FontAwesomeIcon icon={faVolumeHigh} size="2x" />}
-                    click={() => {
-                      setDescSCoutner(descSCounter + 1);
-                    }}
-                    text={questionDesc}
-                  />
-                  <Sound text={descAudio} playCount={descSCounter} />{" "}
-                </>
-              )}
+            <div tw="text-xl whitespace-pre-line h-60 overflow-y-auto">
+              {questionText}
             </div>
+          }
+          controller={
+            <>
+              <Buttons.Button
+                buttonType="audio"
+                size="normal"
+                onClick={() => {
+                  setQuestionSound(questionSound + 1);
+                }}
+              />
+              <Sound buffer={questionAudio} playCount={questionSound} />
+            </>
           }
         />
 
-        <Card
-          Icon={
-            <RecorderControls
-              recorderState={recorderState}
-              handlers={handlers}
-            />
-          }
-          text={`A${nq + 1}`}
-          content={
-            <>{transcribed == "" ? <Bouncing /> : <p>{transcribed}</p>}</>
-          }
-        />
+        {itemType !== "title-and-description" && (
+          <Card
+            label={answerLabel}
+            content={
+              <>
+                {answerText == "" ? (
+                  <Bouncing />
+                ) : (
+                  <p tw="text-xl whitespace-pre-line">{answerText}</p>
+                )}
+              </>
+            }
+            controller={
+              <div tw="flex space-x-3">
+                {answerAudio !== "" && (
+                  <Buttons.Button
+                    buttonType="audio"
+                    size="normal"
+                    onClick={() => {
+                      setAnswerSound(answerSound + 1);
+                    }}
+                  />
+                )}
+                {answerAudio !== "" && (
+                  <Sound buffer={answerAudio} playCount={answerSound} />
+                )}
+                <RecorderControls
+                  recorderState={recorderState}
+                  handlers={handlers}
+                />
+              </div>
+            }
+          />
+        )}
       </div>
 
       <div
         tw="absolute bottom-12 right-12 cursor-pointer"
         onClick={() => {
-          if (nq >= formData.form_items.length - 1) {
-            router.push("/conclusion");
-          } else {
-            setNq(nq + 1);
-          }
+          if (questionIndex >= formData.form_items.length - 1)
+            router.push("/submission");
+          else setQuestionIndex(questionIndex + 1);
         }}
       >
         <Buttons.Button buttonType="next" size="normal" />
@@ -266,11 +263,8 @@ const Question = () => {
       <div
         tw="absolute bottom-12 left-12 cursor-pointer"
         onClick={() => {
-          if (nq <= 0) {
-            router.push("/instruction");
-          } else {
-            setNq(nq - 1);
-          }
+          if (questionIndex <= 0) router.push("/instruction");
+          else setQuestionIndex(questionIndex - 1);
         }}
       >
         <Buttons.Button buttonType="back" size="normal" />
@@ -279,6 +273,6 @@ const Question = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Question), {
+export default dynamic(() => Promise.resolve(Form), {
   ssr: false,
 });
