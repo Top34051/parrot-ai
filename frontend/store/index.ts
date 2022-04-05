@@ -17,6 +17,7 @@ export interface iFormData {
 
 export interface Answer {
   audio: string;
+  audio_url: string;
   text: string;
 }
 
@@ -57,6 +58,7 @@ const useStore = create<storeType>((set) => ({
       ...state,
       answers: new Array(length).fill({
         audio: null,
+        audio_url: "",
         text: "",
       }),
     })),

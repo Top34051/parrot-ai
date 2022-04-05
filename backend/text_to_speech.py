@@ -1,4 +1,3 @@
-from typing import Text
 from google.cloud import texttospeech
 
 
@@ -22,10 +21,3 @@ class TextToSpeech():
             audio_config=self.audio_config
         )
         return response.audio_content.decode('iso-8859-1')
-
-
-if __name__ == '__main__':
-    module = TextToSpeech()
-    content = module.synthesize("Hello world")
-    with open("hello.mp3", "wb") as f:
-        f.write(content.encode('iso-8859-1'))

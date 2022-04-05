@@ -52,8 +52,6 @@ const Sound = ({
   let source: any;
 
   useEffect(() => {
-    console.log("Sound playCount increase");
-
     //@ts-expect-error
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     source = audioCtx.createBufferSource();
@@ -81,7 +79,9 @@ const Sound = ({
   return null;
 };
 
-const Bouncing = () => <div tw="bg-gray-400 p-2 w-36 h-3 rounded-full"></div>;
+const Bouncing = () => (
+  <div tw="animate-pulse bg-gray-400 p-2 w-36 h-3 rounded-full"></div>
+);
 
 const Form = () => {
   const router = useRouter();
@@ -97,6 +97,7 @@ const Form = () => {
 
   const [answerText, setAnswerText] = useState("");
   const [answerAudio, setAnswerAudio] = useState("");
+  const [answerAudioUrl, setAnswerAudioUrl] = useState("");
   const [answerSound, setAnswerSound] = useState(0);
 
   if (!formData || questionIndex < 0) {
@@ -125,30 +126,44 @@ const Form = () => {
           const formData = new FormData();
           formData.append("audio_file", blob);
 
-          fetch(config.apiUrl + "/convert_audio", {
+          fetch(config.apiUrl + "/get_transcript", {
             method: "POST",
             cache: "no-cache",
             body: formData,
             mode: "cors",
           })
             .then((res) => res.json())
-            .then((content) => {
-              setAnswerAudio(content);
-            })
-            .then(() => {
-              fetch(config.apiUrl + "/get_transcript", {
-                method: "POST",
-                cache: "no-cache",
-                body: formData,
-                mode: "cors",
-              })
-                .then((res) => res.json())
-                .then((text) => {
-                  if (text) setAnswerText(text);
+            .then((text) => {
+              if (text && text !== "") {
+                fetch(config.apiUrl + "/save_audio", {
+                  method: "POST",
+                  cache: "no-cache",
+                  body: formData,
+                  mode: "cors",
                 })
-                .catch((err) => {
-                  console.error(err);
-                });
+                  .then((res) => res.json())
+                  .then((url) => {
+                    setAnswerAudioUrl(url);
+                  })
+                  .then(() => {
+                    fetch(config.apiUrl + "/convert_audio", {
+                      method: "POST",
+                      cache: "no-cache",
+                      body: formData,
+                      mode: "cors",
+                    })
+                      .then((res) => res.json())
+                      .then((content) => {
+                        setAnswerAudio(content);
+                      })
+                      .catch((err) => {
+                        console.error(err);
+                      });
+                  })
+                  .then(() => {
+                    setAnswerText(text);
+                  });
+              }
             });
         });
     }
@@ -158,9 +173,14 @@ const Form = () => {
     if (answers[questionIndex] && answers[questionIndex].text)
       setAnswerText(answers[questionIndex].text);
     else setAnswerText("");
+
     if (answers[questionIndex] && answers[questionIndex].audio)
       setAnswerAudio(answers[questionIndex].audio);
     else setAnswerAudio("");
+
+    if (answers[questionIndex] && answers[questionIndex].audio_url)
+      setAnswerAudioUrl(answers[questionIndex].audio_url);
+    else setAnswerAudioUrl("");
     clearAudio();
   }, [questionIndex]);
 
@@ -168,9 +188,14 @@ const Form = () => {
     console.log("Update answer for question", questionIndex);
     setAnswer(questionIndex, {
       audio: answerAudio,
+      audio_url: answerAudioUrl,
       text: answerText,
     });
   }, [answerText]);
+
+  useEffect(() => {
+    console.log("answers:", answers);
+  }, [answers]);
 
   return (
     <div tw="w-screen h-screen flex justify-center items-center">
@@ -195,7 +220,7 @@ const Form = () => {
         <Card
           label={questionLabel}
           content={
-            <div tw="text-xl whitespace-pre-line h-60 overflow-y-auto">
+            <div tw="text-xl whitespace-pre-line max-h-60 overflow-y-auto">
               {questionText}
             </div>
           }

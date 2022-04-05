@@ -7,7 +7,7 @@ from tqdm import tqdm
 from form_scraper import extract_form
 from text_to_speech import TextToSpeech
 from speech_to_text import SpeechToText
-from convert_audio import convert_audio_file
+from convert_audio import convert_audio_file, save_audio_file
 
 
 app = FastAPI(
@@ -40,6 +40,11 @@ speech_to_text = SpeechToText()
 def is_valid_url(url: str):
     response = requests.get(url)
     return response.status_code == 200
+
+
+@app.post('/save_audio')
+def convert_audio(audio_file: bytes = File(...)):
+    return save_audio_file(audio_file)
 
 
 @app.post('/convert_audio')
@@ -90,6 +95,17 @@ def forms(url: str):
 
 @app.post('/submit')
 async def submit(request: Request):
+
     form_data = await request.form()
-    print(form_data)
-    return ""    
+
+    print('Submitting form')
+
+    url = form_data['url']
+    length = int(form_data['num_questions'])
+    
+    for idx in range(length):
+        audio_url = form_data['audio_url_{}'.format(idx)]
+        text = form_data['text_{}'.format(idx)]
+        print(idx, text, audio_url)
+
+    return ""

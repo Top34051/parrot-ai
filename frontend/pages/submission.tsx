@@ -14,6 +14,7 @@ const Submission = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
+    console.log("answers:", answers);
     let invalid = false;
     for (let i = 0; i < answers.length; i++) {
       if (formData?.form_items[i].required && answers[i].text === "")
@@ -29,6 +30,7 @@ const Submission = () => {
       formData.append("num_questions", answers.length.toString());
       for (let i = 0; i < answers.length; i++) {
         formData.append("audio_" + i, answers[i].audio);
+        formData.append("audio_url_" + i, answers[i].audio_url);
         formData.append("text_" + i, answers[i].text);
       }
       fetch(`${config.apiUrl}/submit`, {
