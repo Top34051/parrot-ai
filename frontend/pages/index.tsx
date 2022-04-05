@@ -63,10 +63,6 @@ const Index = () => {
     resetAnswers(formData?.form_items?.length ? formData.form_items.length : 0);
   }, [formData]);
 
-  useEffect(() => {
-    console.log("Update answers", answers);
-  }, [answers]);
-
   return (
     <div tw="flex justify-center items-center w-screen h-screen">
       <section tw="absolute top-12 right-12">

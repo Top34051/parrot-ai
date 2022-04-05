@@ -14,8 +14,6 @@ const Submission = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    console.log("answers", answers);
-    console.log("formData", formData);
     let invalid = false;
     for (let i = 0; i < answers.length; i++) {
       if (formData?.form_items[i].required && answers[i].text === "")
