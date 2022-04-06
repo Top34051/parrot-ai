@@ -1,153 +1,33 @@
-# Parrot.Ai Backend System
+# Parrot.Ai Backend Application
 
-Parrot.Ai backend system mainly supports 
+The backend side is implemented using python FastAPI and is being deployed on Google Cloud App Engine. We choose Cloud App Engine due to its convenient supporting microservices and Horizontal scaling. It is responsible for performing form extraction and communicating with Google Cloud APIs. We utilize three APIs as follows:
 
-1. form extraction
-2. speech conversion both synthesis and recognition.
+(1) Cloud Text-to-Speech is being used to synthesize natural speech of the information we extracted from the Google Forms
+(2) Cloud Speech-to-Text is being used to transcribe a user's input audio into text to fill the form
+(3) Cloud Storage is being used to store user’s audio response for the form owner to replay it if the text response is ambiguous
 
-## Form Extraction
+## Run Backend Application
 
-User can use this system to perform form extraction given just an url to the google form link.
+You have to set up the google cloud service account and authorize all of the following APIs.
 
-Currently, we only support five types of form item:
+(1) Cloud Text-to-Speech API
+(2) Cloud Speech-to-Text API
+(3) Cloud Storage (please initialize bucket named `audio-responses` and authorize bucket owner role)
 
-1. Title and description
-2. Short answer
-3. Multiple choice
-4. Checkboxes
-5. Dropdown
+Then, download your service account and export the `GOOGLE_APPLICATION_CREDENTIAL`.
 
-The result will be a list of form items listed above.
-
-### Title and description
-
-```json
-{
-    'type': 'title-and-description',
-    'data': {
-        'text': {
-            'title': <title>,
-            'description': <description>
-        },
-        'audio_content': {
-            'title': <title>,
-            'description': <description>
-        }
-    }
-    'required': <required>
-}
+```
+export GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_YOUR_SERVICE_ACCOUNT_KEY>
 ```
 
-### Short answer
+Finally, run the application.
 
-```json
-{
-    'type': 'short-answer',
-    'data': {
-        'text': {
-            'title': <title>,
-            'description': <description>
-        },
-        'audio_content': {
-            'title': <title>,
-            'description': <description>
-        }
-    }
-    'required': <required>
-}
+```
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
 ```
 
-### Multiple choice
+### API documentation
 
-```json
-{
-    'type': 'multiple-choice',
-    'data': {
-        'text': {
-            'title': <title>,
-            'description': <description>,
-            'options': [
-                <option_1>,
-                <option_2>,
-                ...
-            ]
-        },
-        'audio_content': {
-            'title': <title>,
-            'description': <description>,
-            'options': [
-                <option_1>,
-                <option_2>,
-                ...
-            ]
-        }
-    }
-    'required': <required>
-}
-```
-
-### Checkboxes
-
-```json
-{
-    'type': 'checkboxes',
-    'data': {
-        'text': {
-            'title': <title>,
-            'description': <description>,
-            'options': [
-                <option_1>,
-                <option_2>,
-                ...
-            ]
-        },
-        'audio_content': {
-            'title': <title>,
-            'description': <description>,
-            'options': [
-                <option_1>,
-                <option_2>,
-                ...
-            ]
-        }
-    }
-    'required': <required>
-}
-```
-
-### Dropdown
-
-```json
-{
-    'type': 'dropdown',
-    'data': {
-        'text': {
-            'title': <title>,
-            'description': <description>,
-            'options': [
-                <option_1>,
-                <option_2>,
-                ...
-            ]
-        },
-        'audio_content': {
-            'title': <title>,
-            'description': <description>,
-            'options': [
-                <option_1>,
-                <option_2>,
-                ...
-            ]
-        }
-    },
-    'required': <required>
-}
-```
-
-## Speech Synthesize
-
-The system synthesizes speech for each form item such as title, description, question, and choices. The system will call Google Cloud Text-to-Speech API to generate such audio and store them in Firebase.
-
-## Speech Recognition
-
-The system uses Google Cloud Speech-to-Text API to transcribe given audio blob from the user.
+The interactive API documentation is provided at [http://localhost:8000/docs](http://localhost:8000/docs).
