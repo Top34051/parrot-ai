@@ -58,17 +58,26 @@ def extract_form(url: str):
         radio_soup = item_soup.find('div', {'role': 'listitem'}).find_all_next('div', {'role': 'radio'})
         if radio_soup:
             type = 'multiple-choice'
-            options = [option['aria-label'] for option in radio_soup]
+            label_list = item_soup.find('div', {'role': 'listitem'}).find_all('label')
+            for label in label_list:
+                label = BeautifulSoup(str(label), 'html.parser')
+                options.append(label.text)
 
         checkboxes_soup = item_soup.find('div', {'role': 'listitem'}).find_all_next('div', {'role': 'checkbox'})
         if checkboxes_soup:
             type = 'checkboxes'
-            options = [option['aria-label'] for option in checkboxes_soup]
+            label_list = item_soup.find('div', {'role': 'listitem'}).find_all('label')
+            for label in label_list:
+                label = BeautifulSoup(str(label), 'html.parser')
+                options.append(label.text)
 
         options_soup = item_soup.find('div', {'role': 'listitem'}).find_all_next('div', {'role': 'option'})
         if options_soup:
             type = 'dropdown'
-            options = [option['data-value'] for option in options_soup if option['tabindex'] == '-1']
+            label_list = item_soup.find('div', {'role': 'listitem'}).find_all('label')
+            for label in label_list:
+                label = BeautifulSoup(str(label), 'html.parser')
+                options.append(label.text)
 
         form_items.append({
             'type': type,
