@@ -3,7 +3,9 @@
 The backend side is implemented using python FastAPI and is being deployed on Google Cloud App Engine. We choose Cloud App Engine due to its convenient supporting microservices and Horizontal scaling. It is responsible for performing form extraction and communicating with Google Cloud APIs. We utilize three APIs as follows:
 
 (1) Cloud Text-to-Speech is being used to synthesize natural speech of the information we extracted from the Google Forms
+
 (2) Cloud Speech-to-Text is being used to transcribe a user's input audio into text to fill the form
+
 (3) Cloud Storage is being used to store user’s audio response for the form owner to replay it if the text response is ambiguous
 
 ## Run Backend Application
